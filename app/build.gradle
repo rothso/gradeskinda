@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 23
@@ -17,9 +18,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.1'
+
+    // Java 8 lambdas
+    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.6'
+
+    // Logging
+    compile 'com.jakewharton.timber:timber:3.1.0'
+
+    // Unit testing
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:2.2.0'
+    testCompile('com.squareup.assertj:assertj-android:1.1.0') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    testCompile('org.robolectric:robolectric:3.0') {
+        exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }
 }
