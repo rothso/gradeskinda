@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import com.rothanak.gradeskinda.BuildConfig;
 import com.rothanak.gradeskinda.ui.login.LoginActivity;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -16,8 +15,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.util.ActivityController;
-
-import timber.log.Timber;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.robolectric.Shadows.shadowOf;
@@ -28,17 +25,6 @@ public class DashboardActivityTest {
 
     private Application application = RuntimeEnvironment.application;
     private ActivityController<DashboardActivity> controller;
-
-    @Before
-    public void setUp() {
-        // TODO plant tree in Application
-        // TODO refactor to include in test runner
-        Timber.plant(new Timber.Tree() {
-            @Override public void log(int priority, String tag, String message, Throwable t) {
-                System.out.println(message);
-            }
-        });
-    }
 
     @Test
     public void openDashboard_WithoutCachedAuthToken_RedirectsToLogin() {
