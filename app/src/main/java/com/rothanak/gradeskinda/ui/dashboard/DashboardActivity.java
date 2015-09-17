@@ -1,39 +1,41 @@
 package com.rothanak.gradeskinda.ui.dashboard;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.rothanak.gradeskinda.GradesApplication;
 import com.rothanak.gradeskinda.R;
+import com.rothanak.gradeskinda.data.auth.AuthResolver;
 import com.rothanak.gradeskinda.ui.login.LoginActivity;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
 public class DashboardActivity extends AppCompatActivity {
 
+    @Inject AuthResolver authResolver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((GradesApplication) getApplication()).component().inject(this);
 
-        if (getAuthToken() == null) {
+        String authToken = authResolver.getAuthToken();
+
+        if (authToken == null) {
             Timber.d("No cached auth token, redirecting to login.");
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             finish();
-            startActivity(new Intent(this, LoginActivity.class));
-            return;
+        } else {
+            Timber.d("Found auth token, " + authToken + ", showing view.");
+            setContentView(R.layout.activity_dashboard);
         }
-
-        setContentView(R.layout.activity_dashboard);
-    }
-
-    // TODO refactor
-    private String getAuthToken() {
-        Context context = getApplicationContext();
-        SharedPreferences prefs = context.getSharedPreferences("gradeskinda", MODE_PRIVATE);
-        return prefs.getString("auth_token", null);
     }
 
     @Override
