@@ -29,6 +29,13 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.1'
 
+    // Viewmodels
+    compile 'eu.inloop:androidviewmodel:0.3.2'
+
+    // RxJava
+    compile 'io.reactivex:rxjava:1.0.14'
+    compile 'io.reactivex:rxandroid:1.0.1'
+
     // Java 8 lambdas
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.6'
 

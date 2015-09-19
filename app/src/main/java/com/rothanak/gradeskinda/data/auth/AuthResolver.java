@@ -1,7 +1,9 @@
 package com.rothanak.gradeskinda.data.auth;
 
+import rx.Observable;
+
 public interface AuthResolver {
 
-    String getAuthToken();
+    Observable<Boolean> isLoggedIn();
 
 }

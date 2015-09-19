@@ -21,6 +21,8 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.util.ActivityController;
 
+import rx.Observable;
+
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
@@ -46,7 +48,7 @@ public class DashboardActivityTest {
 
     @Test
     public void openDashboard_WithoutCachedAuthToken_RedirectsToLogin() {
-        when(authResolver.getAuthToken()).thenReturn(null);
+        when(authResolver.isLoggedIn()).thenReturn(Observable.just(false));
         controller = Robolectric.buildActivity(DashboardActivity.class);
 
         DashboardActivity activity = controller.create().get();
@@ -60,7 +62,7 @@ public class DashboardActivityTest {
 
     @Test
     public void openDashboard_WithCachedAuthToken_ShowsView() {
-        when(authResolver.getAuthToken()).thenReturn("DummyToken");
+        when(authResolver.isLoggedIn()).thenReturn(Observable.just(true));
         controller = Robolectric.buildActivity(DashboardActivity.class);
 
         DashboardActivity activity = controller.create().get();

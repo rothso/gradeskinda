@@ -24,16 +24,16 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ((GradesApplication) getApplication()).component().inject(this);
 
-        String authToken = authResolver.getAuthToken();
+        boolean loggedIn = authResolver.isLoggedIn().toBlocking().first();
 
-        if (authToken == null) {
+        if (!loggedIn) {
             Timber.d("No cached auth token, redirecting to login.");
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         } else {
-            Timber.d("Found auth token, " + authToken + ", showing view.");
+            Timber.d("Found auth token, showing view.");
             setContentView(R.layout.activity_dashboard);
         }
     }
