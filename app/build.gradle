@@ -12,6 +12,9 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        testApplicationId "com.rothanak.gradeskinda.cucumber"
+        testInstrumentationRunner "com.rothanak.gradeskinda.cucumber.CucumberRunner"
     }
     buildTypes {
         release {
@@ -29,15 +32,20 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.1'
 
-    // Viewmodels
-    compile 'eu.inloop:androidviewmodel:0.3.2'
+    // Java 8 lambdas
+    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.6'
+
+    // Fix version conflicts
+    testCompile 'com.android.support:support-annotations:23.0.1';
+    androidTestCompile 'com.android.support:support-annotations:23.0.1';
 
     // RxJava
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'io.reactivex:rxandroid:1.0.1'
 
-    // Java 8 lambdas
-    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.6'
+    // View injectons and bindings
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.2.0'
 
     // Dependency Injection
     compile 'com.google.dagger:dagger:2.0.1'
@@ -47,12 +55,17 @@ dependencies {
     // Logging
     compile 'com.jakewharton.timber:timber:3.1.0'
 
+    // Instrumentation testing
+    androidTestCompile 'org.mockito:mockito-core:2.0.31-beta'
+    androidTestCompile 'info.cukes:cucumber-android:1.2.2'
+    androidTestCompile 'com.android.support.test:runner:0.3'
+    androidTestCompile 'com.android.support.test:rules:0.3'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
+
     // Unit testing
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:2.2.0'
-    testCompile('com.squareup.assertj:assertj-android:1.1.0') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    testCompile 'com.squareup.assertj:assertj-android:1.1.0'
     testCompile 'org.mockito:mockito-core:2.0.31-beta'
     testCompile('org.robolectric:robolectric:3.0') {
         exclude group: 'commons-logging', module: 'commons-logging'

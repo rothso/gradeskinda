@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.rothanak.gradeskinda.GradesApplication;
 import com.rothanak.gradeskinda.R;
-import com.rothanak.gradeskinda.data.auth.AuthResolver;
+import com.rothanak.gradeskinda.data.auth.AuthFacade;
 import com.rothanak.gradeskinda.ui.login.LoginActivity;
 
 import javax.inject.Inject;
@@ -17,14 +17,14 @@ import timber.log.Timber;
 
 public class DashboardActivity extends AppCompatActivity {
 
-    @Inject AuthResolver authResolver;
+    @Inject AuthFacade authFacade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((GradesApplication) getApplication()).component().inject(this);
 
-        boolean loggedIn = authResolver.isLoggedIn().toBlocking().first();
+        boolean loggedIn = authFacade.isLoggedIn().toBlocking().first();
 
         if (!loggedIn) {
             Timber.d("No cached auth token, redirecting to login.");

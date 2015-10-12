@@ -1,7 +1,7 @@
 package com.rothanak.gradeskinda;
 
+import com.rothanak.gradeskinda.data.auth.AuthFacade;
 import com.rothanak.gradeskinda.data.auth.AuthModule;
-import com.rothanak.gradeskinda.data.auth.AuthResolver;
 import com.rothanak.gradeskinda.ui.dashboard.DashboardActivity;
 
 import javax.inject.Singleton;
@@ -14,6 +14,6 @@ public interface AppComponent {
 
     void inject(DashboardActivity activity);
 
-    AuthResolver authResolver();
+    AuthFacade authResolver();
 
 }

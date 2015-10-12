@@ -7,7 +7,7 @@ import com.rothanak.gradeskinda.AppComponent;
 import com.rothanak.gradeskinda.BuildConfig;
 import com.rothanak.gradeskinda.DaggerAppComponent;
 import com.rothanak.gradeskinda.TestGradesApplication;
-import com.rothanak.gradeskinda.data.auth.AuthResolver;
+import com.rothanak.gradeskinda.data.auth.AuthFacade;
 import com.rothanak.gradeskinda.data.auth.MockAuthModule;
 import com.rothanak.gradeskinda.ui.login.LoginActivity;
 
@@ -34,7 +34,7 @@ public class DashboardActivityTest {
     private Application application = RuntimeEnvironment.application;
     private ActivityController<DashboardActivity> controller;
 
-    private AuthResolver authResolver;
+    private AuthFacade authFacade;
 
     @Before
     public void setUp() {
@@ -43,12 +43,12 @@ public class DashboardActivityTest {
                 .build();
 
         ((TestGradesApplication) application).component(component);
-        authResolver = component.authResolver();
+        authFacade = component.authResolver();
     }
 
     @Test
-    public void openDashboard_WithoutCachedAuthToken_RedirectsToLogin() {
-        when(authResolver.isLoggedIn()).thenReturn(Observable.just(false));
+    public void openDashboard_WithoutCachedAuthToken_ShouldRedirectToLogin() {
+        when(authFacade.isLoggedIn()).thenReturn(Observable.just(false));
         controller = Robolectric.buildActivity(DashboardActivity.class);
 
         DashboardActivity activity = controller.create().get();
@@ -61,8 +61,8 @@ public class DashboardActivityTest {
     }
 
     @Test
-    public void openDashboard_WithCachedAuthToken_ShowsView() {
-        when(authResolver.isLoggedIn()).thenReturn(Observable.just(true));
+    public void openDashboard_WithCachedAuthToken_ShouldShowView() {
+        when(authFacade.isLoggedIn()).thenReturn(Observable.just(true));
         controller = Robolectric.buildActivity(DashboardActivity.class);
 
         DashboardActivity activity = controller.create().get();
