@@ -38,6 +38,7 @@ public class DashboardActivityTest {
 
     @Before
     public void setUp() {
+        // Inject an auth resolver to be later mocked in the tests
         final AppComponent component = DaggerAppComponent.builder()
                 .authModule(new MockAuthModule())
                 .build();
@@ -48,11 +49,15 @@ public class DashboardActivityTest {
 
     @Test
     public void openDashboard_WithoutCachedAuthToken_ShouldRedirectToLogin() {
+        // Set the user login verification to always fail
         when(authFacade.isLoggedIn()).thenReturn(Observable.just(false));
         controller = Robolectric.buildActivity(DashboardActivity.class);
 
+        // Launch the dashboard activity, which checks for auth internally
         DashboardActivity activity = controller.create().get();
 
+        // Verify the user is sent to the LoginActivity and the Dashboard
+        // activity finishes without showing any dashboard content
         ShadowActivity shadow = shadowOf(activity);
         Intent expectedIntent = new Intent(activity, LoginActivity.class);
         assertThat(shadow.getNextStartedActivity()).isEqualTo(expectedIntent);
@@ -62,11 +67,15 @@ public class DashboardActivityTest {
 
     @Test
     public void openDashboard_WithCachedAuthToken_ShouldShowView() {
+        // Set the user login verification to always pass
         when(authFacade.isLoggedIn()).thenReturn(Observable.just(true));
         controller = Robolectric.buildActivity(DashboardActivity.class);
 
+        // Launch the dashboard activity, which checks for auth internally
         DashboardActivity activity = controller.create().get();
 
+        // Verify the user isn't redirected and is shown the dashboard
+        // content in the same Dashboard activity
         ShadowActivity shadow = shadowOf(activity);
         assertThat(shadow.getNextStartedActivity()).isNull();
         assertThat(shadow.getContentView()).isVisible();

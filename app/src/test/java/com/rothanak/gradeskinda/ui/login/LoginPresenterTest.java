@@ -21,6 +21,7 @@ public class LoginPresenterTest {
     private static final String GOOD_PASS = "1";
     private static final String BAD_USER = "2";
     private static final String BAD_PASS = "2";
+
     @Mock private AuthFacade authenticator;
     @Mock private LoginPresenter.View view;
 
