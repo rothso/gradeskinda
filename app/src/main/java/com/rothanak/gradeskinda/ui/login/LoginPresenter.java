@@ -5,7 +5,7 @@ import com.rothanak.gradeskinda.data.auth.AuthFacade;
 public class LoginPresenter {
 
     private final AuthFacade authenticator;
-    private View view;
+    private View view; // TODO WeakReference
 
     public LoginPresenter(AuthFacade authenticator) {
         this.authenticator = authenticator;
