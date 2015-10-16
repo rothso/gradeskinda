@@ -15,6 +15,9 @@ public class GradesApplication extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        // AuthModule is internally instantiated
+        component = DaggerAppComponent.create();
     }
 
     public AppComponent component() {

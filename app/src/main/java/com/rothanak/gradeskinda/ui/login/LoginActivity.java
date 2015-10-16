@@ -8,21 +8,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.rothanak.gradeskinda.GradesApplication;
 import com.rothanak.gradeskinda.R;
-import com.rothanak.gradeskinda.data.auth.AuthFacade;
 import com.rothanak.gradeskinda.ui.dashboard.DashboardActivity;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Single;
 
 public class LoginActivity extends AppCompatActivity implements LoginPresenter.View {
 
     @Bind(R.id.username) EditText usernameField;
     @Bind(R.id.password) EditText passwordField;
     @Bind(R.id.submit_login) Button loginButton;
-    private LoginPresenter presenter;
+
+    @Inject LoginPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +31,13 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        // TODO: 9/26/15 refactor
-        AuthFacade authenticator = new AuthFacade() {
-            @Override public Observable<Boolean> isLoggedIn() {
-                return null;
-            }
+        GradesApplication application = (GradesApplication) getApplication();
 
-            @Override public Single<Boolean> login(String username, String password) {
-                return Single.just(username.equals("Username") && password.equals("Password"));
-            }
-        };
-        presenter = new LoginPresenter(authenticator);
+        DaggerLoginComponent.builder()
+                .loginModule(new LoginModule())
+                .appComponent(application.component())
+                .build().inject(this);
+
         presenter.attachView(this);
 
         loginButton.setOnClickListener(v -> {
@@ -65,4 +62,5 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
     @Override public void showBadCredentialsError() {
         Toast.makeText(this, "The username or password is invalid.", Toast.LENGTH_SHORT).show();
     }
+
 }

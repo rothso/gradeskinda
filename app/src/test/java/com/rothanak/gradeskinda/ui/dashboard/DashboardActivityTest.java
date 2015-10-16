@@ -31,9 +31,7 @@ import static org.robolectric.Shadows.shadowOf;
 @Config(constants = BuildConfig.class, sdk = 21)
 public class DashboardActivityTest {
 
-    private Application application = RuntimeEnvironment.application;
     private ActivityController<DashboardActivity> controller;
-
     private AuthFacade authFacade;
 
     @Before
@@ -43,8 +41,10 @@ public class DashboardActivityTest {
                 .authModule(new MockAuthModule())
                 .build();
 
+        Application application = RuntimeEnvironment.application;
         ((TestGradesApplication) application).component(component);
-        authFacade = component.authResolver();
+
+        authFacade = component.authFacade();
     }
 
     @Test

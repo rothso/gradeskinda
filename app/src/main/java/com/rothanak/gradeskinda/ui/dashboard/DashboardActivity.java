@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
-import com.rothanak.gradeskinda.GradesApplication;
 import com.rothanak.gradeskinda.R;
 import com.rothanak.gradeskinda.data.auth.AuthFacade;
 import com.rothanak.gradeskinda.ui.login.LoginActivity;
@@ -21,7 +20,9 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((GradesApplication) getApplication()).component().inject(this);
+
+        // TODO dagger injection
+        // TODO mvp pattern
 
         boolean loggedIn = authFacade.isLoggedIn().toBlocking().first();
 
