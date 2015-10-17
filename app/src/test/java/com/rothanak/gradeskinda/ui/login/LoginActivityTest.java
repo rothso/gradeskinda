@@ -10,8 +10,8 @@ import com.rothanak.gradeskinda.BuildConfig;
 import com.rothanak.gradeskinda.DaggerAppComponent;
 import com.rothanak.gradeskinda.R;
 import com.rothanak.gradeskinda.TestGradesApplication;
-import com.rothanak.gradeskinda.data.auth.AuthFacade;
-import com.rothanak.gradeskinda.data.auth.MockAuthModule;
+import com.rothanak.gradeskinda.interactor.LoginInteractor;
+import com.rothanak.gradeskinda.interactor.MockInteractorModule;
 import com.rothanak.gradeskinda.ui.dashboard.DashboardActivity;
 
 import org.junit.Before;
@@ -46,15 +46,15 @@ public class LoginActivityTest {
 
     @Before
     public void setUp() {
-        // Inject a mockable AuthModule into the Application for LoginActivity to use
+        // Inject a mockable InteractorModule so that LoginInteractor can be mocked
         Application application = RuntimeEnvironment.application;
-        AppComponent component = DaggerAppComponent.builder().authModule(new MockAuthModule()).build();
+        AppComponent component = DaggerAppComponent.builder().interactorModule(new MockInteractorModule()).build();
         ((TestGradesApplication) application).component(component);
 
-        // Get the AuthFacade and pre-configure successful login
-        AuthFacade authFacade = component.authFacade();
-        when(authFacade.login(anyString(), anyString())).thenReturn(Single.just(false));
-        when(authFacade.login("Username", "Password")).thenReturn(Single.just(true));
+        // Preconfigure successful logins so the network doesn't have to be hit
+        LoginInteractor mockInteractor = component.loginInteractor();
+        when(mockInteractor.login(anyString(), anyString())).thenReturn(Single.just(false));
+        when(mockInteractor.login("Username", "Password")).thenReturn(Single.just(true));
     }
 
     @Test

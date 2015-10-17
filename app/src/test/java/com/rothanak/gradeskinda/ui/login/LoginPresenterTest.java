@@ -1,6 +1,6 @@
 package com.rothanak.gradeskinda.ui.login;
 
-import com.rothanak.gradeskinda.data.auth.AuthFacade;
+import com.rothanak.gradeskinda.interactor.LoginInteractor;
 import com.rothanak.gradeskinda.ui.login.LoginPresenter.View;
 
 import org.junit.Before;
@@ -22,18 +22,17 @@ public class LoginPresenterTest {
     private static final String GOOD_PASS = "1";
     private static final String BAD_USER = "2";
     private static final String BAD_PASS = "2";
-
+    @Mock LoginInteractor interactor;
     private LoginPresenter presenter;
-    @Mock private AuthFacade authenticator;
     @Mock private View view;
 
     @Before
     public void setUp() {
         // Set predefined responses for "good" and "bad" logins
-        when(authenticator.login(GOOD_USER, GOOD_PASS)).thenReturn(Single.just(true));
-        when(authenticator.login(BAD_USER, BAD_PASS)).thenReturn(Single.just(false));
+        when(interactor.login(GOOD_USER, GOOD_PASS)).thenReturn(Single.just(true));
+        when(interactor.login(BAD_USER, BAD_PASS)).thenReturn(Single.just(false));
 
-        presenter = new LoginPresenter(authenticator);
+        presenter = new LoginPresenter(interactor);
     }
 
     @Test

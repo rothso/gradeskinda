@@ -1,21 +1,21 @@
 package com.rothanak.gradeskinda.ui.login;
 
-import com.rothanak.gradeskinda.data.auth.AuthFacade;
+import com.rothanak.gradeskinda.interactor.LoginInteractor;
 
 import javax.inject.Inject;
 
 public class LoginPresenter {
 
-    private final AuthFacade authenticator;
+    private final LoginInteractor interactor;
     private View view; // TODO WeakReference
 
     @Inject
-    public LoginPresenter(AuthFacade authenticator) {
-        this.authenticator = authenticator;
+    public LoginPresenter(LoginInteractor interactor) {
+        this.interactor = interactor;
     }
 
     public void verifyCredentials(String user, String pass) {
-        authenticator.login(user, pass).subscribe(
+        interactor.login(user, pass).subscribe(
                 isSuccess -> {
                     if (isSuccess) {
                         view.gotoDashboard();
