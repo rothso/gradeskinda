@@ -5,7 +5,7 @@ import com.rothanak.gradeskinda.interactor.scheduler.AddSchedulesTransformer;
 
 import javax.inject.Inject;
 
-import rx.Single;
+import rx.Observable;
 
 /**
  * Allows the presenter to submit a login request without knowing anything
@@ -34,8 +34,8 @@ public class LoginInteractor {
      * @return true if success, false if bad credentials, throwable otherwise
      */
     @SuppressWarnings("unchecked")
-    public Single<Boolean> login(String user, String pass) {
-        return authenticator.login(user, pass).toObservable().compose(scheduler).toSingle();
+    public Observable<Boolean> login(String user, String pass) {
+        return authenticator.login(user, pass).compose(scheduler);
     }
 
 }

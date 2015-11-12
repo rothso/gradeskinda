@@ -24,7 +24,7 @@ import org.robolectric.annotation.Config;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Single;
+import rx.Observable;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -53,8 +53,8 @@ public class LoginActivityTest {
 
         // Preconfigure successful logins so the network doesn't have to be hit
         LoginInteractor mockInteractor = component.loginInteractor();
-        when(mockInteractor.login(anyString(), anyString())).thenReturn(Single.just(false));
-        when(mockInteractor.login("Username", "Password")).thenReturn(Single.just(true));
+        when(mockInteractor.login(anyString(), anyString())).thenReturn(Observable.just(false));
+        when(mockInteractor.login("Username", "Password")).thenReturn(Observable.just(true));
     }
 
     @Test

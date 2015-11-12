@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import rx.Single;
+import rx.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
@@ -24,7 +24,7 @@ public class LoginInteractorTest {
 
     @Before
     public void setUp() {
-        when(authenticator.login(anyString(), anyString())).thenReturn(Single.just(true));
+        when(authenticator.login(anyString(), anyString())).thenReturn(Observable.just(true));
         interactor = new LoginInteractor(authenticator, TestAddSchedulesTransformer.get());
     }
 
@@ -33,9 +33,9 @@ public class LoginInteractorTest {
         String username = "Username";
         String password = "Password";
 
-        Single<Boolean> login = interactor.login(username, password);
+        Observable<Boolean> login = interactor.login(username, password);
 
-        assertThat(login.toObservable().toBlocking().first()).isTrue();
+        assertThat(login.toBlocking().first()).isTrue();
         verify(authenticator).login(username, password);
     }
 

@@ -5,7 +5,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import rx.Observable;
-import rx.Single;
 
 @Module
 public class AuthModule {
@@ -16,7 +15,7 @@ public class AuthModule {
                 throw new UnsupportedOperationException();
             }
 
-            @Override public Single<Boolean> login(String username, String password) {
+            @Override public Observable<Boolean> login(String username, String password) {
                 throw new UnsupportedOperationException();
             }
         };

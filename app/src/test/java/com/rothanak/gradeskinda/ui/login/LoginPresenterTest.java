@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import rx.Single;
+import rx.Observable;
 
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -29,8 +29,8 @@ public class LoginPresenterTest {
     @Before
     public void setUp() {
         // Set predefined responses for "good" and "bad" logins
-        when(interactor.login(GOOD_USER, GOOD_PASS)).thenReturn(Single.just(true));
-        when(interactor.login(BAD_USER, BAD_PASS)).thenReturn(Single.just(false));
+        when(interactor.login(GOOD_USER, GOOD_PASS)).thenReturn(Observable.just(true));
+        when(interactor.login(BAD_USER, BAD_PASS)).thenReturn(Observable.just(false));
 
         presenter = new LoginPresenter(interactor);
     }
