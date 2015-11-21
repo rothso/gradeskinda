@@ -1,7 +1,7 @@
 package com.rothanak.gradeskinda.interactor;
 
 import com.rothanak.gradeskinda.data.auth.AuthFacade;
-import com.rothanak.gradeskinda.ui.login.scheduler.TestAddSchedulesTransformer;
+import com.rothanak.gradeskinda.interactor.scheduler.TestAddSchedulesTransformer;
 
 import org.junit.Before;
 import org.junit.Test;

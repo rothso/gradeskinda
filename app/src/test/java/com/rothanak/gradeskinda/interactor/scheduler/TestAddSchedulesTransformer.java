@@ -1,6 +1,4 @@
-package com.rothanak.gradeskinda.ui.login.scheduler;
-
-import com.rothanak.gradeskinda.interactor.scheduler.AddSchedulesTransformer;
+package com.rothanak.gradeskinda.interactor.scheduler;
 
 import rx.Scheduler;
 import rx.schedulers.Schedulers;
