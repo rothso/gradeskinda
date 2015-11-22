@@ -1,6 +1,7 @@
 package com.rothanak.gradeskinda.interactor;
 
 import com.rothanak.gradeskinda.data.auth.AuthFacade;
+import com.rothanak.gradeskinda.data.entity.Credentials;
 import com.rothanak.gradeskinda.interactor.scheduler.AddSchedulesTransformer;
 
 import javax.inject.Inject;
@@ -29,13 +30,12 @@ public class LoginInteractor {
      * the request is short-circuited due to a network error or similar, an
      * Observable error should have propagated for the calling code to handle.
      *
-     * @param user the username to submit
-     * @param pass the password to submit
+     * @param credentials the username and password
      * @return true if success, false if bad credentials, throwable otherwise
      */
     @SuppressWarnings("unchecked")
-    public Observable<Boolean> login(String user, String pass) {
-        return authenticator.login(user, pass).compose(scheduler);
+    public Observable<Boolean> login(Credentials credentials) {
+        return authenticator.login(credentials).compose(scheduler);
     }
 
 }

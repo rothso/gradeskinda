@@ -1,5 +1,6 @@
 package com.rothanak.gradeskinda.ui.login;
 
+import com.rothanak.gradeskinda.data.entity.Credentials;
 import com.rothanak.gradeskinda.interactor.LoginInteractor;
 
 import javax.inject.Inject;
@@ -15,7 +16,8 @@ public class LoginPresenter {
     }
 
     public void verifyCredentials(String user, String pass) {
-        interactor.login(user, pass).subscribe(
+        Credentials credentials = new Credentials(user, pass);
+        interactor.login(credentials).subscribe(
                 isSuccess -> {
                     if (isSuccess) {
                         view.gotoDashboard();

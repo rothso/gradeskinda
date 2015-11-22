@@ -9,7 +9,7 @@ import dagger.Provides;
 public class AuthModule {
 
     @Provides @Singleton AuthFacade authResolver() {
-        return (username, password) -> {
+        return credentials -> {
             throw new UnsupportedOperationException();
         };
     }

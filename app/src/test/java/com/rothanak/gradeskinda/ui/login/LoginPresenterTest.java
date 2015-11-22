@@ -1,5 +1,6 @@
 package com.rothanak.gradeskinda.ui.login;
 
+import com.rothanak.gradeskinda.data.entity.Credentials;
 import com.rothanak.gradeskinda.interactor.LoginInteractor;
 import com.rothanak.gradeskinda.ui.login.LoginPresenter.View;
 
@@ -28,9 +29,12 @@ public class LoginPresenterTest {
 
     @Before
     public void setUp() {
+        Credentials goodCredentials = new Credentials(GOOD_USER, GOOD_PASS);
+        Credentials badCredentials = new Credentials(BAD_USER, BAD_PASS);
+
         // Set predefined responses for "good" and "bad" logins
-        when(interactor.login(GOOD_USER, GOOD_PASS)).thenReturn(Observable.just(true));
-        when(interactor.login(BAD_USER, BAD_PASS)).thenReturn(Observable.just(false));
+        when(interactor.login(goodCredentials)).thenReturn(Observable.just(true));
+        when(interactor.login(badCredentials)).thenReturn(Observable.just(false));
 
         presenter = new LoginPresenter(interactor);
     }

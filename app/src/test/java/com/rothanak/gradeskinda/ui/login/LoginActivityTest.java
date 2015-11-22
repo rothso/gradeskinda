@@ -10,6 +10,7 @@ import com.rothanak.gradeskinda.BuildConfig;
 import com.rothanak.gradeskinda.DaggerAppComponent;
 import com.rothanak.gradeskinda.R;
 import com.rothanak.gradeskinda.TestGradesApplication;
+import com.rothanak.gradeskinda.data.entity.Credentials;
 import com.rothanak.gradeskinda.interactor.LoginInteractor;
 import com.rothanak.gradeskinda.interactor.MockInteractorModule;
 import com.rothanak.gradeskinda.ui.dashboard.DashboardActivity;
@@ -30,7 +31,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.shadows.ShadowToast.showedToast;
@@ -53,8 +54,8 @@ public class LoginActivityTest {
 
         // Preconfigure successful logins so the network doesn't have to be hit
         LoginInteractor mockInteractor = component.loginInteractor();
-        when(mockInteractor.login(anyString(), anyString())).thenReturn(Observable.just(false));
-        when(mockInteractor.login("Username", "Password")).thenReturn(Observable.just(true));
+        when(mockInteractor.login(any(Credentials.class))).thenReturn(Observable.just(false));
+        when(mockInteractor.login(new Credentials("Username", "Password"))).thenReturn(Observable.just(true));
     }
 
     @Test
