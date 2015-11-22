@@ -8,7 +8,7 @@ import dagger.Provides;
 @Module
 public class AuthModule {
 
-    @Provides @Singleton AuthFacade authResolver() {
+    @Provides @Singleton Authenticator authenticator() {
         return credentials -> {
             throw new UnsupportedOperationException();
         };

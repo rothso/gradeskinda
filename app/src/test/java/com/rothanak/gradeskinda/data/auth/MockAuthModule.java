@@ -4,8 +4,8 @@ import static org.mockito.Mockito.mock;
 
 public class MockAuthModule extends AuthModule {
 
-    @Override AuthFacade authResolver() {
-        return mock(AuthFacade.class);
+    @Override Authenticator authenticator() {
+        return mock(Authenticator.class);
     }
 
 }

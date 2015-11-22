@@ -1,6 +1,6 @@
 package com.rothanak.gradeskinda.interactor;
 
-import com.rothanak.gradeskinda.data.auth.AuthFacade;
+import com.rothanak.gradeskinda.data.auth.Authenticator;
 import com.rothanak.gradeskinda.data.entity.Credentials;
 import com.rothanak.gradeskinda.interactor.scheduler.TestAddSchedulesTransformer;
 
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginInteractorTest {
 
-    @Mock private AuthFacade authenticator;
+    @Mock private Authenticator authenticator;
     private LoginInteractor interactor;
 
     @Before

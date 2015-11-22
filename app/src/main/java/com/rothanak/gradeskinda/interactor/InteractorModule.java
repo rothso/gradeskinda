@@ -1,6 +1,6 @@
 package com.rothanak.gradeskinda.interactor;
 
-import com.rothanak.gradeskinda.data.auth.AuthFacade;
+import com.rothanak.gradeskinda.data.auth.Authenticator;
 import com.rothanak.gradeskinda.interactor.scheduler.AddSchedulesTransformer;
 
 import javax.inject.Singleton;
@@ -18,7 +18,7 @@ public class InteractorModule {
     }
 
     @Provides @Singleton
-    LoginInteractor loginInteractor(AuthFacade authenticator, AddSchedulesTransformer scheduler) {
+    LoginInteractor loginInteractor(Authenticator authenticator, AddSchedulesTransformer scheduler) {
         return new LoginInteractor(authenticator, scheduler);
     }
 

@@ -1,6 +1,6 @@
 package com.rothanak.gradeskinda.interactor;
 
-import com.rothanak.gradeskinda.data.auth.AuthFacade;
+import com.rothanak.gradeskinda.data.auth.Authenticator;
 import com.rothanak.gradeskinda.data.entity.Credentials;
 import com.rothanak.gradeskinda.interactor.scheduler.AddSchedulesTransformer;
 
@@ -14,11 +14,11 @@ import rx.Observable;
  */
 public class LoginInteractor {
 
-    private final AuthFacade authenticator;
+    private final Authenticator authenticator;
     private final AddSchedulesTransformer scheduler;
 
     @Inject
-    public LoginInteractor(AuthFacade authenticator, AddSchedulesTransformer scheduler) {
+    public LoginInteractor(Authenticator authenticator, AddSchedulesTransformer scheduler) {
         this.authenticator = authenticator;
         this.scheduler = scheduler;
     }

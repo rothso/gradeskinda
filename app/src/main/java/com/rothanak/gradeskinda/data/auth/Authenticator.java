@@ -4,7 +4,7 @@ import com.rothanak.gradeskinda.data.entity.Credentials;
 
 import rx.Observable;
 
-public interface AuthFacade {
+public interface Authenticator {
 
     Observable<Boolean> login(Credentials credentials);
 
