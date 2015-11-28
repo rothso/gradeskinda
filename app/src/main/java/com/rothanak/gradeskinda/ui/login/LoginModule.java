@@ -1,6 +1,6 @@
 package com.rothanak.gradeskinda.ui.login;
 
-import com.rothanak.gradeskinda.interactor.LoginInteractor;
+import com.rothanak.gradeskinda.domain.interactor.LoginInteractor;
 import com.rothanak.gradeskinda.ui.PerActivity;
 
 import dagger.Module;

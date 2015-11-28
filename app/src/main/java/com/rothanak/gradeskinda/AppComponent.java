@@ -1,9 +1,8 @@
 package com.rothanak.gradeskinda;
 
 import com.rothanak.gradeskinda.data.auth.AuthModule;
-import com.rothanak.gradeskinda.data.auth.Authenticator;
-import com.rothanak.gradeskinda.interactor.InteractorModule;
-import com.rothanak.gradeskinda.interactor.LoginInteractor;
+import com.rothanak.gradeskinda.domain.interactor.InteractorModule;
+import com.rothanak.gradeskinda.domain.interactor.LoginInteractor;
 
 import javax.inject.Singleton;
 
@@ -17,8 +16,6 @@ import dagger.Component;
         }
 )
 public interface AppComponent {
-
-    Authenticator authFacade();
 
     LoginInteractor loginInteractor();
 

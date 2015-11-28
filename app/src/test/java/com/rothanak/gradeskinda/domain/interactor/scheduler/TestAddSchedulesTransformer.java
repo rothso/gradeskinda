@@ -1,4 +1,4 @@
-package com.rothanak.gradeskinda.interactor.scheduler;
+package com.rothanak.gradeskinda.domain.interactor.scheduler;
 
 import rx.Scheduler;
 import rx.schedulers.Schedulers;

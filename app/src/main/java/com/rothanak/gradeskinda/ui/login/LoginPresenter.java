@@ -1,7 +1,7 @@
 package com.rothanak.gradeskinda.ui.login;
 
-import com.rothanak.gradeskinda.data.entity.Credentials;
-import com.rothanak.gradeskinda.interactor.LoginInteractor;
+import com.rothanak.gradeskinda.domain.interactor.LoginInteractor;
+import com.rothanak.gradeskinda.domain.model.Credentials;
 
 import javax.inject.Inject;
 

@@ -1,4 +1,4 @@
-package com.rothanak.gradeskinda.data.entity;
+package com.rothanak.gradeskinda.domain.model;
 
 public final class Credentials {
 

@@ -1,6 +1,6 @@
-package com.rothanak.gradeskinda.data.auth;
+package com.rothanak.gradeskinda.domain.service;
 
-import com.rothanak.gradeskinda.data.entity.Credentials;
+import com.rothanak.gradeskinda.domain.model.Credentials;
 
 import rx.Observable;
 

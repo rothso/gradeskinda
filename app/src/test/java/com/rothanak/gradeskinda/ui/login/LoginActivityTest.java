@@ -10,9 +10,9 @@ import com.rothanak.gradeskinda.BuildConfig;
 import com.rothanak.gradeskinda.DaggerAppComponent;
 import com.rothanak.gradeskinda.R;
 import com.rothanak.gradeskinda.TestGradesApplication;
-import com.rothanak.gradeskinda.data.entity.Credentials;
-import com.rothanak.gradeskinda.interactor.LoginInteractor;
-import com.rothanak.gradeskinda.interactor.MockInteractorModule;
+import com.rothanak.gradeskinda.domain.interactor.LoginInteractor;
+import com.rothanak.gradeskinda.domain.interactor.MockInteractorModule;
+import com.rothanak.gradeskinda.domain.model.Credentials;
 import com.rothanak.gradeskinda.ui.dashboard.DashboardActivity;
 
 import org.junit.Before;

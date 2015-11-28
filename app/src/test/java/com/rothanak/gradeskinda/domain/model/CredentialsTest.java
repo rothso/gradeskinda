@@ -1,4 +1,4 @@
-package com.rothanak.gradeskinda.data.entity;
+package com.rothanak.gradeskinda.domain.model;
 
 import org.junit.Test;
 

@@ -1,7 +1,7 @@
 package com.rothanak.gradeskinda.ui.login;
 
-import com.rothanak.gradeskinda.data.entity.Credentials;
-import com.rothanak.gradeskinda.interactor.LoginInteractor;
+import com.rothanak.gradeskinda.domain.interactor.LoginInteractor;
+import com.rothanak.gradeskinda.domain.model.Credentials;
 import com.rothanak.gradeskinda.ui.login.LoginPresenter.View;
 
 import org.junit.Before;
@@ -19,13 +19,14 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginPresenterTest {
 
-    private static final String GOOD_USER = "1";
-    private static final String GOOD_PASS = "1";
-    private static final String BAD_USER = "2";
-    private static final String BAD_PASS = "2";
-    @Mock LoginInteractor interactor;
-    private LoginPresenter presenter;
+    public static final String GOOD_USER = "1";
+    public static final String GOOD_PASS = "1";
+    public static final String BAD_USER = "2";
+    public static final String BAD_PASS = "2";
+
+    @Mock private LoginInteractor interactor;
     @Mock private View view;
+    private LoginPresenter presenter;
 
     @Before
     public void setUp() {
