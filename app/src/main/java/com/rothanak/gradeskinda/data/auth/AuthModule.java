@@ -10,10 +10,21 @@ import dagger.Provides;
 @Module
 public class AuthModule {
 
-    @Provides @Singleton Authenticator authenticator() {
+    @Provides @Singleton LoginService loginService() {
         return credentials -> {
             throw new UnsupportedOperationException();
         };
+    }
+
+    @Provides @Singleton AuthRepository authRepository() {
+        return token -> {
+            throw new UnsupportedOperationException();
+        };
+    }
+
+    @Provides @Singleton
+    Authenticator authenticator(LoginService loginService, AuthRepository authRepository) {
+        return new DefaultAuthenticator(loginService, authRepository);
     }
 
 }
