@@ -55,6 +55,17 @@ dependencies {
     // Logging
     compile 'com.jakewharton.timber:timber:3.1.0'
 
+    // Networking
+    compile('com.squareup.retrofit:retrofit:2.0.0-beta2') {
+        exclude group: 'com.squareup', module: 'okhttp'
+    }
+    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+    compile 'com.squareup.okhttp:okhttp:2.7.0'
+    compile 'com.squareup.okhttp:logging-interceptor:2.7.0'
+
+    // HTML Parser
+    compile 'org.jsoup:jsoup:1.8.3'
+
     // Instrumentation testing
     androidTestCompile 'org.mockito:mockito-core:2.0.31-beta'
     androidTestCompile 'info.cukes:cucumber-android:1.2.2'

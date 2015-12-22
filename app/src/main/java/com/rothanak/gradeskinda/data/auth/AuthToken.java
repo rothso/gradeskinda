@@ -8,4 +8,7 @@ public class AuthToken {
         this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
 }
