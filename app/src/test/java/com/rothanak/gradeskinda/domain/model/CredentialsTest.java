@@ -13,18 +13,23 @@ public class CredentialsTest {
     }
 
     @Test public void sameCredentials_AreEqual() {
-        Credentials credentials1 = new Credentials("User", "Pass");
-        Credentials credentials2 = new Credentials("User", "Pass");
+        Credentials credentials1 = CredentialsBuilder.defaultCredentials().build();
+        Credentials credentials2 = CredentialsBuilder.defaultCredentials().build();
 
         assertThat(credentials1).isEqualTo(credentials1);
         assertThat(credentials1).isEqualTo(credentials2);
     }
 
     @Test public void differentCredentials_AreUnequal() {
-        Credentials credentials1 = new Credentials("User", "Pass");
-        Credentials credentials2 = new Credentials("Diff", "Pass");
-        Credentials credentials3 = new Credentials("User", "Diff");
-        Credentials credentials4 = new Credentials("Diff", "Diff");
+        // Exhaustively test four cross-combination pairs
+        Credentials credentials1 = CredentialsBuilder.defaultCredentials()
+                .withUsername("UsernameA").withPassword("PasswordA").build();
+        Credentials credentials2 = CredentialsBuilder.defaultCredentials()
+                .withUsername("UsernameA").withPassword("PasswordB").build();
+        Credentials credentials3 = CredentialsBuilder.defaultCredentials()
+                .withUsername("UsernameB").withPassword("PasswordA").build();
+        Credentials credentials4 = CredentialsBuilder.defaultCredentials()
+                .withUsername("UsernameB").withPassword("PasswordB").build();
 
         assertThat(credentials1)
                 .isNotEqualTo(credentials2)

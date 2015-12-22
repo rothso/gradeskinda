@@ -1,6 +1,7 @@
 package com.rothanak.gradeskinda.data.auth;
 
 import com.rothanak.gradeskinda.domain.model.Credentials;
+import com.rothanak.gradeskinda.domain.model.CredentialsBuilder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,10 +31,10 @@ public class DefaultAuthenticatorTest {
 
     @Test
     public void loginSuccessful_ReturnsTrue() {
-        when(loginService.login(any(Credentials.class))).thenReturn(Observable.just(any(AuthToken.class)));
+        Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
+        when(loginService.login(goodCredentials)).thenReturn(Observable.just(any(AuthToken.class)));
 
-        Credentials credentials = new Credentials("Username", "Password");
-        boolean success = authenticator.login(credentials).toBlocking().first();
+        boolean success = authenticator.login(goodCredentials).toBlocking().first();
 
         assertThat(success).isTrue();
     }
@@ -41,30 +42,30 @@ public class DefaultAuthenticatorTest {
     @Test
     public void loginSuccessful_PersistsAuthToken() {
         AuthToken token = new AuthToken("Token");
-        when(loginService.login(any(Credentials.class))).thenReturn(Observable.just(token));
+        Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
+        when(loginService.login(goodCredentials)).thenReturn(Observable.just(token));
 
-        Credentials credentials = new Credentials("Username", "Password");
-        authenticator.login(credentials).toBlocking().first();
+        authenticator.login(goodCredentials).toBlocking().first();
 
         verify(repository).store(token);
     }
 
     @Test
     public void loginFailed_ReturnsFalse() {
-        when(loginService.login(any(Credentials.class))).thenReturn(Observable.empty());
+        Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
+        when(loginService.login(badCredentials)).thenReturn(Observable.empty());
 
-        Credentials credentials = new Credentials("Username", "Password");
-        boolean success = authenticator.login(credentials).toBlocking().first();
+        boolean success = authenticator.login(badCredentials).toBlocking().first();
 
         assertThat(success).isFalse();
     }
 
     @Test
     public void loginFailed_WontPersistAnything() {
-        when(loginService.login(any(Credentials.class))).thenReturn(Observable.empty());
+        Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
+        when(loginService.login(badCredentials)).thenReturn(Observable.empty());
 
-        Credentials credentials = new Credentials("Username", "Password");
-        authenticator.login(credentials).toBlocking().first();
+        authenticator.login(badCredentials).toBlocking().first();
 
         verify(repository, never()).store(any());
     }

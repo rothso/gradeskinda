@@ -1,6 +1,7 @@
 package com.rothanak.gradeskinda.data.auth;
 
 import com.rothanak.gradeskinda.domain.model.Credentials;
+import com.rothanak.gradeskinda.domain.model.CredentialsBuilder;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -37,7 +38,7 @@ public class RemoteLoginServiceTest {
         });
         RemoteLoginService loginService = new RemoteLoginService(client, cookieManager);
 
-        Credentials credentials = new Credentials("Username", "Password");
+        Credentials credentials = CredentialsBuilder.defaultCredentials().build();
         AuthToken token = loginService.login(credentials).toBlocking().first();
 
         // todo

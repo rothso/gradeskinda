@@ -2,6 +2,7 @@ package com.rothanak.gradeskinda.domain.interactor;
 
 import com.rothanak.gradeskinda.domain.interactor.scheduler.TestAddSchedulesTransformer;
 import com.rothanak.gradeskinda.domain.model.Credentials;
+import com.rothanak.gradeskinda.domain.model.CredentialsBuilder;
 import com.rothanak.gradeskinda.domain.service.Authenticator;
 
 import org.junit.Before;
@@ -31,9 +32,7 @@ public class LoginInteractorTest {
 
     @Test
     public void login_PassesThroughToAuthenticator() {
-        String username = "Username";
-        String password = "Password";
-        Credentials credentials = new Credentials(username, password);
+        Credentials credentials = CredentialsBuilder.defaultCredentials().build();
 
         Observable<Boolean> login = interactor.login(credentials);
 

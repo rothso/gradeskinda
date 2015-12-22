@@ -1,5 +1,6 @@
 package com.rothanak.gradeskinda.data.auth;
 
+// TODO: replace with SessionCookies
 public class AuthToken {
 
     private final String value;
