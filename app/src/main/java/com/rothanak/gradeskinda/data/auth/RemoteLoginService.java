@@ -10,7 +10,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.CookieManager;
-import java.net.HttpCookie;
 
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -22,7 +21,7 @@ import retrofit.http.POST;
 import retrofit.http.Url;
 import rx.Observable;
 
-public class RemoteLoginService implements LoginService {
+class RemoteLoginService implements LoginService {
 
     private final OkHttpClient client;
     private final CookieManager cookieManager;
@@ -39,7 +38,7 @@ public class RemoteLoginService implements LoginService {
     }
 
     @Override
-    public Observable<AuthToken> login(Credentials credentials) {
+    public Observable<Session> login(Credentials credentials) {
         String user = credentials.getUsername();
         String pass = credentials.getPassword();
 
@@ -54,12 +53,11 @@ public class RemoteLoginService implements LoginService {
                 .filter(key -> key != null && !key.isEmpty())
                 .flatMap(loginApi::finalize)
                 .flatMap(response ->
-                        // Filter the cookies and store the session details in an AuthToken
+                        // Filter the cookies and store them in a Session
                         Observable.from(cookieManager.getCookieStore().getCookies())
                                 .filter(cookie -> cookie.getName().matches("PHPSESSID|session_timeout"))
-                                .map(HttpCookie::toString)
-                                .reduce((acc, cookie) -> acc + ";" + cookie)
-                                .map(AuthToken::new)
+                                .toList()
+                                .map(Session::new)
                 );
     }
 

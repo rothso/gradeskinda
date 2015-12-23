@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 public class MockAuthModule extends AuthModule {
 
     @Override
-    Authenticator authenticator(LoginService loginService, AuthRepository authRepository) {
+    Authenticator authenticator(LoginService loginService, SessionRepository sessionRepository) {
         return mock(Authenticator.class);
     }
 

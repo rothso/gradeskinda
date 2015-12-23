@@ -15,12 +15,6 @@ public class CredentialsBuilder {
         return new CredentialsBuilder();
     }
 
-    public static CredentialsBuilder otherCredentials() {
-        return CredentialsBuilder.defaultCredentials()
-                .withUsername("JaneDoe")
-                .withPassword("wrong horse battery staple");
-    }
-
     public CredentialsBuilder withUsername(String username) {
         this.username = username;
         return this;

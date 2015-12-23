@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class DefaultAuthenticatorTest {
 
     @Mock private LoginService loginService;
-    @Mock private AuthRepository repository;
+    @Mock private SessionRepository repository;
     private DefaultAuthenticator authenticator;
 
     @Before
@@ -31,8 +31,9 @@ public class DefaultAuthenticatorTest {
 
     @Test
     public void loginSuccessful_ReturnsTrue() {
+        Session session = SessionBuilder.defaultSession().build();
         Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
-        when(loginService.login(goodCredentials)).thenReturn(Observable.just(any(AuthToken.class)));
+        when(loginService.login(goodCredentials)).thenReturn(Observable.just(session));
 
         boolean success = authenticator.login(goodCredentials).toBlocking().first();
 
@@ -41,13 +42,13 @@ public class DefaultAuthenticatorTest {
 
     @Test
     public void loginSuccessful_PersistsAuthToken() {
-        AuthToken token = new AuthToken("Token");
+        Session session = SessionBuilder.defaultSession().build();
         Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
-        when(loginService.login(goodCredentials)).thenReturn(Observable.just(token));
+        when(loginService.login(goodCredentials)).thenReturn(Observable.just(session));
 
         authenticator.login(goodCredentials).toBlocking().first();
 
-        verify(repository).store(token);
+        verify(repository).store(session);
     }
 
     @Test

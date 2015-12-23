@@ -39,7 +39,7 @@ public class RemoteLoginServiceTest {
         RemoteLoginService loginService = new RemoteLoginService(client, cookieManager);
 
         Credentials credentials = CredentialsBuilder.defaultCredentials().build();
-        AuthToken token = loginService.login(credentials).toBlocking().first();
+        Session session = loginService.login(credentials).toBlocking().first();
 
         // todo
     }

@@ -5,12 +5,12 @@ import com.rothanak.gradeskinda.domain.service.Authenticator;
 
 import rx.Observable;
 
-public class DefaultAuthenticator implements Authenticator {
+class DefaultAuthenticator implements Authenticator {
 
     private final LoginService loginService;
-    private final AuthRepository repository;
+    private final SessionRepository repository;
 
-    public DefaultAuthenticator(LoginService loginService, AuthRepository repository) {
+    public DefaultAuthenticator(LoginService loginService, SessionRepository repository) {
         this.loginService = loginService;
         this.repository = repository;
     }
@@ -18,7 +18,7 @@ public class DefaultAuthenticator implements Authenticator {
     @Override public Observable<Boolean> login(Credentials credentials) {
         return loginService.login(credentials)
                 .doOnNext(repository::store)
-                .map(token -> true)
+                .map(session -> true)
                 .defaultIfEmpty(false);
     }
 }

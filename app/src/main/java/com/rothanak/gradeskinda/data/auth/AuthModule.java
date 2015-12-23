@@ -16,15 +16,15 @@ public class AuthModule {
         };
     }
 
-    @Provides @Singleton AuthRepository authRepository() {
-        return token -> {
+    @Provides @Singleton SessionRepository sessionRepository() {
+        return session -> {
             throw new UnsupportedOperationException();
         };
     }
 
     @Provides @Singleton
-    Authenticator authenticator(LoginService loginService, AuthRepository authRepository) {
-        return new DefaultAuthenticator(loginService, authRepository);
+    Authenticator authenticator(LoginService loginService, SessionRepository sessionRepository) {
+        return new DefaultAuthenticator(loginService, sessionRepository);
     }
 
 }

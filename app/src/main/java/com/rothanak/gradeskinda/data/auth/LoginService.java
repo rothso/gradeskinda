@@ -6,6 +6,6 @@ import rx.Observable;
 
 public interface LoginService {
 
-    Observable<AuthToken> login(Credentials credentials);
+    Observable<Session> login(Credentials credentials);
 
 }
