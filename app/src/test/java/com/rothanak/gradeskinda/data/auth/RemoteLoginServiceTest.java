@@ -7,6 +7,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.CookieManager;
@@ -17,8 +18,8 @@ import rx.Observable;
 
 public class RemoteLoginServiceTest {
 
-    @Test
-    public void loginSuccessful_ReturnsAuthToken() {
+    @Ignore @Test
+    public void login_WithGoodCredentials_ReturnsSession() {
         // TODO replace manual test DI with Dagger
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);

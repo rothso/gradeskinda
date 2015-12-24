@@ -30,18 +30,18 @@ public class DefaultAuthenticatorTest {
     }
 
     @Test
-    public void loginSuccessful_ReturnsTrue() {
+    public void login_WithGoodCredentials_ReturnsTrue() {
         Session session = SessionBuilder.defaultSession().build();
         Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
         when(loginService.login(goodCredentials)).thenReturn(Observable.just(session));
 
-        boolean success = authenticator.login(goodCredentials).toBlocking().first();
+        boolean loginSuccess = authenticator.login(goodCredentials).toBlocking().first();
 
-        assertThat(success).isTrue();
+        assertThat(loginSuccess).isTrue();
     }
 
     @Test
-    public void loginSuccessful_PersistsAuthToken() {
+    public void login_WithGoodCredentials_PersistsSessionDetails() {
         Session session = SessionBuilder.defaultSession().build();
         Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
         when(loginService.login(goodCredentials)).thenReturn(Observable.just(session));
@@ -52,17 +52,17 @@ public class DefaultAuthenticatorTest {
     }
 
     @Test
-    public void loginFailed_ReturnsFalse() {
+    public void login_WithBadCredentials_ReturnsFalse() {
         Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
         when(loginService.login(badCredentials)).thenReturn(Observable.empty());
 
-        boolean success = authenticator.login(badCredentials).toBlocking().first();
+        boolean loginSuccess = authenticator.login(badCredentials).toBlocking().first();
 
-        assertThat(success).isFalse();
+        assertThat(loginSuccess).isFalse();
     }
 
     @Test
-    public void loginFailed_WontPersistAnything() {
+    public void login_WithBadCredentials_WontPersistAnything() {
         Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
         when(loginService.login(badCredentials)).thenReturn(Observable.empty());
 

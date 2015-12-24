@@ -46,7 +46,7 @@ public class LoginActivityTest {
     @Bind(R.id.submit_login) Button loginButton;
 
     private LoginActivity activity;
-    private LoginInteractor mockInteractor;
+    private LoginInteractor interactor;
 
     @Before
     public void setUp() {
@@ -56,7 +56,7 @@ public class LoginActivityTest {
         ((TestGradesApplication) application).component(component);
 
         // For arranging successful logins, now the network doesn't have to be hit
-        mockInteractor = component.loginInteractor();
+        interactor = component.loginInteractor();
 
         // Set up the activity and bind view components to fields
         activity = Robolectric.setupActivity(LoginActivity.class);
@@ -68,7 +68,7 @@ public class LoginActivityTest {
         Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
         String username = goodCredentials.getUsername();
         String password = goodCredentials.getPassword();
-        when(mockInteractor.login(goodCredentials)).thenReturn(Observable.just(true));
+        when(interactor.login(goodCredentials)).thenReturn(Observable.just(true));
 
         usernameField.setText(username);
         passwordField.setText(password);
@@ -84,7 +84,7 @@ public class LoginActivityTest {
         Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
         String username = badCredentials.getUsername();
         String password = badCredentials.getPassword();
-        when(mockInteractor.login(badCredentials)).thenReturn(Observable.just(false));
+        when(interactor.login(badCredentials)).thenReturn(Observable.just(false));
 
         usernameField.setText(username);
         passwordField.setText(password);

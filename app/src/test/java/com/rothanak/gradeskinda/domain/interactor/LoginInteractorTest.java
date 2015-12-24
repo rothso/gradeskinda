@@ -14,7 +14,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import rx.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,17 +25,18 @@ public class LoginInteractorTest {
 
     @Before
     public void setUp() {
-        when(authenticator.login(any(Credentials.class))).thenReturn(Observable.just(true));
         interactor = new LoginInteractor(authenticator, TestAddSchedulesTransformer.get());
     }
 
     @Test
-    public void login_PassesThroughToAuthenticator() {
+    public void login_WithCredentials_PassesThroughToAuthenticator() {
         Credentials credentials = CredentialsBuilder.defaultCredentials().build();
+        when(authenticator.login(credentials)).thenReturn(Observable.just(true));
 
         Observable<Boolean> login = interactor.login(credentials);
+        boolean loginSuccess = login.toBlocking().first();
 
-        assertThat(login.toBlocking().first()).isTrue();
+        assertThat(loginSuccess).isTrue();
         verify(authenticator).login(credentials);
     }
 
