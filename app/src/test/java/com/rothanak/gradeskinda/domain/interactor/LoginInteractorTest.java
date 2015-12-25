@@ -15,8 +15,8 @@ import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import rx.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(HierarchicalContextRunner.class)
 public class LoginInteractorTest {
@@ -35,7 +35,7 @@ public class LoginInteractorTest {
 
             @Test public void shouldPassThroughToAuthenticator() {
                 Credentials credentials = CredentialsBuilder.defaultCredentials().build();
-                when(authenticator.login(credentials)).thenReturn(Observable.just(true));
+                given(authenticator.login(credentials)).willReturn(Observable.just(true));
 
                 Observable<Boolean> login = interactor.login(credentials);
                 boolean loginSuccess = login.toBlocking().first();

@@ -33,7 +33,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.shadows.ShadowToast.showedToast;
 import static org.robolectric.shadows.ShadowToast.shownToastCount;
@@ -83,7 +83,7 @@ public class LoginActivityTest {
                 Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
                 String username = goodCredentials.getUsername();
                 String password = goodCredentials.getPassword();
-                when(interactor.login(goodCredentials)).thenReturn(Observable.just(true));
+                given(interactor.login(goodCredentials)).willReturn(Observable.just(true));
 
                 usernameField.setText(username);
                 passwordField.setText(password);
@@ -104,7 +104,7 @@ public class LoginActivityTest {
                 Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
                 String username = badCredentials.getUsername();
                 String password = badCredentials.getPassword();
-                when(interactor.login(badCredentials)).thenReturn(Observable.just(false));
+                given(interactor.login(badCredentials)).willReturn(Observable.just(false));
 
                 usernameField.setText(username);
                 passwordField.setText(password);

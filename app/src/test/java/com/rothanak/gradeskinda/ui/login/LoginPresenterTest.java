@@ -14,9 +14,9 @@ import org.mockito.MockitoAnnotations;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import rx.Observable;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(HierarchicalContextRunner.class)
 public class LoginPresenterTest {
@@ -40,7 +40,7 @@ public class LoginPresenterTest {
                 Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
                 String username = goodCredentials.getUsername();
                 String password = goodCredentials.getPassword();
-                when(interactor.login(goodCredentials)).thenReturn(Observable.just(true));
+                given(interactor.login(goodCredentials)).willReturn(Observable.just(true));
 
                 // Log in with good credentials
                 presenter.verifyCredentials(username, password);
@@ -59,7 +59,7 @@ public class LoginPresenterTest {
                 Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
                 String username = badCredentials.getUsername();
                 String password = badCredentials.getPassword();
-                when(interactor.login(badCredentials)).thenReturn(Observable.just(false));
+                given(interactor.login(badCredentials)).willReturn(Observable.just(false));
 
                 // Log in with bad credentials
                 presenter.verifyCredentials(username, password);
