@@ -6,6 +6,10 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/*
+ * Not sure if this test offers any real business value. The equals and hashcode are overridden
+ * just for particular unit test verifications involving equality.
+ */
 public class CredentialsTest {
 
     @Test public void equals_MatchesHashCodeEquals() {

@@ -18,6 +18,7 @@ import com.rothanak.gradeskinda.ui.dashboard.DashboardActivity;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
@@ -37,22 +38,26 @@ import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.shadows.ShadowToast.showedToast;
 import static org.robolectric.shadows.ShadowToast.shownToastCount;
 
-@RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
+/*
+ * RobolectricGradleTestRunner and HierarchyContextRunner don't play nice together: both are only
+ * available as Runners and evaluate the tests after setting things up, so fall back to JUnit's
+ * experimental (albeit much-more-boilerplatey) Enclosed runner for now.
+ */
+@RunWith(Enclosed.class)
 public class LoginActivityTest {
 
+    protected LoginActivity activity;
+    protected LoginInteractor interactor;
     @Bind(R.id.username) EditText usernameField;
     @Bind(R.id.password) EditText passwordField;
     @Bind(R.id.submit_login) Button loginButton;
 
-    private LoginActivity activity;
-    private LoginInteractor interactor;
-
-    @Before
-    public void setUp() {
+    @Before public void setUp() {
         // Inject a mockable InteractorModule so that LoginInteractor can be mocked
         Application application = RuntimeEnvironment.application;
-        AppComponent component = DaggerAppComponent.builder().interactorModule(new MockInteractorModule()).build();
+        AppComponent component = DaggerAppComponent.builder()
+                .interactorModule(new MockInteractorModule())
+                .build();
         ((TestGradesApplication) application).component(component);
 
         // For arranging successful logins, now the network doesn't have to be hit
@@ -63,35 +68,52 @@ public class LoginActivityTest {
         ButterKnife.bind(this, activity);
     }
 
-    @Test
-    public void login_WithGoodCredentials_ShouldShowDashboard() {
-        Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
-        String username = goodCredentials.getUsername();
-        String password = goodCredentials.getPassword();
-        when(interactor.login(goodCredentials)).thenReturn(Observable.just(true));
+    /*
+     * The test methods are cold-evaluated only once, but shown twice in the GUI view because the
+     * @RunWith annotation leads IntelliJ to treat this inner class as any other test class.
+     */
+    @RunWith(Enclosed.class)
+    public static class SubmitLogin {
 
-        usernameField.setText(username);
-        passwordField.setText(password);
-        loginButton.performClick();
+        @RunWith(RobolectricGradleTestRunner.class)
+        @Config(constants = BuildConfig.class, sdk = 21)
+        public static class WhenCredentialsGood extends LoginActivityTest {
 
-        Intent expectedIntent = new Intent(activity, DashboardActivity.class);
-        assertThat(shadowOf(activity).getNextStartedActivity(), is(equalTo(expectedIntent)));
-        assertThat(shownToastCount(), is(0));
+            @Test public void shouldShowDashboard() {
+                Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
+                String username = goodCredentials.getUsername();
+                String password = goodCredentials.getPassword();
+                when(interactor.login(goodCredentials)).thenReturn(Observable.just(true));
+
+                usernameField.setText(username);
+                passwordField.setText(password);
+                loginButton.performClick();
+
+                Intent expectedIntent = new Intent(activity, DashboardActivity.class);
+                assertThat(shadowOf(activity).getNextStartedActivity(), is(equalTo(expectedIntent)));
+                assertThat(shownToastCount(), is(0));
+            }
+
+        }
+
+        @RunWith(RobolectricGradleTestRunner.class)
+        @Config(constants = BuildConfig.class, sdk = 21)
+        public static class WhenCredentialsBad extends LoginActivityTest {
+
+            @Test public void shouldShowError() {
+                Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
+                String username = badCredentials.getUsername();
+                String password = badCredentials.getPassword();
+                when(interactor.login(badCredentials)).thenReturn(Observable.just(false));
+
+                usernameField.setText(username);
+                passwordField.setText(password);
+                loginButton.performClick();
+
+                assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
+                assertThat(showedToast("The username or password is invalid."), is(true));
+            }
+
+        }
     }
-
-    @Test
-    public void login_WithBadCredentials_ShouldShowError() {
-        Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
-        String username = badCredentials.getUsername();
-        String password = badCredentials.getPassword();
-        when(interactor.login(badCredentials)).thenReturn(Observable.just(false));
-
-        usernameField.setText(username);
-        passwordField.setText(password);
-        loginButton.performClick();
-
-        assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
-        assertThat(showedToast("The username or password is invalid."), is(true));
-    }
-
 }

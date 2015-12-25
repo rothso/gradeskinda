@@ -9,35 +9,41 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 
+import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import rx.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(HierarchicalContextRunner.class)
 public class LoginInteractorTest {
 
     @Mock private Authenticator authenticator;
     private LoginInteractor interactor;
 
-    @Before
-    public void setUp() {
+    @Before public void setUp() {
+        MockitoAnnotations.initMocks(this);
         interactor = new LoginInteractor(authenticator, TestAddSchedulesTransformer.get());
     }
 
-    @Test
-    public void login_WithCredentials_PassesThroughToAuthenticator() {
-        Credentials credentials = CredentialsBuilder.defaultCredentials().build();
-        when(authenticator.login(credentials)).thenReturn(Observable.just(true));
+    public class Login {
 
-        Observable<Boolean> login = interactor.login(credentials);
-        boolean loginSuccess = login.toBlocking().first();
+        public class WhenCredentialsGiven {
 
-        assertThat(loginSuccess).isTrue();
-        verify(authenticator).login(credentials);
+            @Test public void shouldPassThroughToAuthenticator() {
+                Credentials credentials = CredentialsBuilder.defaultCredentials().build();
+                when(authenticator.login(credentials)).thenReturn(Observable.just(true));
+
+                Observable<Boolean> login = interactor.login(credentials);
+                boolean loginSuccess = login.toBlocking().first();
+
+                assertThat(loginSuccess).isTrue();
+                verify(authenticator).login(credentials);
+            }
+
+        }
     }
-
 }

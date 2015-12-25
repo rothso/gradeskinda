@@ -9,57 +9,66 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 
+import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import rx.Observable;
 
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(HierarchicalContextRunner.class)
 public class LoginPresenterTest {
 
     @Mock private LoginInteractor interactor;
     @Mock private View view;
     private LoginPresenter presenter;
 
-    @Before
-    public void setUp() {
+    @Before public void setUp() {
+        MockitoAnnotations.initMocks(this);
         presenter = new LoginPresenter(interactor);
         presenter.attachView(view);
     }
 
-    @Test
-    public void verifyCredentials_WithGoodCredentials_ShouldShowDashboard() {
-        // Arrange a successful login
-        Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
-        String username = goodCredentials.getUsername();
-        String password = goodCredentials.getPassword();
-        when(interactor.login(goodCredentials)).thenReturn(Observable.just(true));
+    public class VerifyCredentials {
 
-        // Log in with good credentials
-        presenter.verifyCredentials(username, password);
+        public class WhenCredentialsGood {
 
-        // Verify we can proceed
-        verify(view).gotoDashboard();
-        verify(view, never()).showBadCredentialsError();
+            @Test public void shouldTriggerShowDashboard() {
+                // Arrange a successful login
+                Credentials goodCredentials = CredentialsBuilder.defaultCredentials().build();
+                String username = goodCredentials.getUsername();
+                String password = goodCredentials.getPassword();
+                when(interactor.login(goodCredentials)).thenReturn(Observable.just(true));
+
+                // Log in with good credentials
+                presenter.verifyCredentials(username, password);
+
+                // Verify we can proceed
+                verify(view).gotoDashboard();
+                verify(view, never()).showBadCredentialsError();
+            }
+
+        }
+
+        public class WhenCredentialsBad {
+
+            @Test public void shouldTriggerError() {
+                // Arrange a doomed login
+                Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
+                String username = badCredentials.getUsername();
+                String password = badCredentials.getPassword();
+                when(interactor.login(badCredentials)).thenReturn(Observable.just(false));
+
+                // Log in with bad credentials
+                presenter.verifyCredentials(username, password);
+
+                // Verify the user cannot proceed and sees an error
+                verify(view, never()).gotoDashboard();
+                verify(view).showBadCredentialsError();
+            }
+
+        }
     }
-
-    @Test
-    public void verifyCredentials_WithBadCredentials_ShouldShowError() {
-        // Arrange a doomed login
-        Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
-        String username = badCredentials.getUsername();
-        String password = badCredentials.getPassword();
-        when(interactor.login(badCredentials)).thenReturn(Observable.just(false));
-
-        // Log in with bad credentials
-        presenter.verifyCredentials(username, password);
-
-        // Verify the user cannot proceed and sees an error
-        verify(view, never()).gotoDashboard();
-        verify(view).showBadCredentialsError();
-    }
-
 }

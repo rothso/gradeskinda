@@ -7,20 +7,26 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
 
+import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import rx.Observable;
 
+@Ignore
+@RunWith(HierarchicalContextRunner.class)
 public class RemoteLoginServiceTest {
 
-    @Ignore @Test
-    public void login_WithGoodCredentials_ReturnsSession() {
-        // TODO replace manual test DI with Dagger
+    private RemoteLoginService loginService;
+
+    @Before public void setUp() {
+        // TODO replace this mess with a Dagger module setup
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
@@ -37,12 +43,44 @@ public class RemoteLoginServiceTest {
             );
             return chain.proceed(requestBuilder.build());
         });
-        RemoteLoginService loginService = new RemoteLoginService(client, cookieManager);
-
-        Credentials credentials = CredentialsBuilder.defaultCredentials().build();
-        Session session = loginService.login(credentials).toBlocking().first();
-
-        // todo
+        loginService = new RemoteLoginService(client, cookieManager);
     }
 
+    public class Login {
+
+        public class WhenCredentialsSucceed {
+
+            @Test public void ShouldReturnSession() {
+                Credentials credentials = CredentialsBuilder.defaultCredentials().build();
+                // TODO network stubbing with Betamax
+
+                Session session = loginService.login(credentials).toBlocking().first();
+
+                // TODO assertions
+            }
+
+        }
+
+        public class WhenCredentialsFail {
+
+            @Test public void ShouldReturnNull() {
+            }
+
+        }
+
+        public class WhenRemoteNetworkDown {
+
+            @Test public void ShouldThrowRemoteNetworkDownException() {
+            }
+
+        }
+
+        public class WhenLocalNetworkDown {
+
+            @Test public void ShouldThrowLocalNetworkDownException() {
+            }
+
+        }
+
+    }
 }
