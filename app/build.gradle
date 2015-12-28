@@ -84,4 +84,5 @@ dependencies {
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
+    testCompile 'com.github.tomakehurst:wiremock:2.0.8-beta'
 }

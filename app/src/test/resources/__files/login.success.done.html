@@ -1,0 +1,1827 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Portal</title>
+    <meta http-equiv='Content-Type' content='text/html' charset='UTF-8'>
+    <meta http-equiv='Content-Language' content='en-us'>
+    <noscript>
+        <meta http-equiv='refresh' content='0;url=index.php?modfunc=logout&reason=javascript'>
+    </noscript>
+    <script>var redSubmitDisabled = false;</script>
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png"/>
+    <script>
+        var dynascan_index = "focus//dynascan/index.php";
+        var scanUrl = "";
+        var scanTmp = "";
+        var dynascan_host = window.location.host;
+        var fu_data;
+    </script>
+    <script src="assets/jquery/jquery.js"></script>
+    <script src="assets/jquery/jquery.ui.js"></script>
+    <link rel='stylesheet' type='text/css'
+          href='https://duval.focusschoolsoftware.com/focus/build/sis.css?version=1449686360&hash=8f91fc5c940b0f1a58eac2966a86e1bf3491aef7'>
+    <script src='https://duval.focusschoolsoftware.com/focus/build/sis.js?version=1449686368&hash=cf0c0cbd89d60855240287cfc9e1c3e15cba95a7'></script>
+    <script>Focus.AJAXURL = 'Modules.php?modname=misc/Portal.php&ajax=true';</script>
+    <script src='assets/Templates/Templates.js'></script>
+    <link rel='stylesheet' media='only screen and (max-width: 400px)' href='assets/mobile.css'/>
+
+    <link rel=stylesheet type=text/css
+          href='assets/themes/Default/stylesheet-static.css?1448415319'>
+    <script src='assets/resizetable.js?1436963312'></script>
+    <script src='assets/ckeditor/ckeditor.js?1420598421'></script>
+
+    <link rel='stylesheet' type='text/css' media='all' href='assets/jscalendar/calendar-blue2.css'>
+    <link rel='stylesheet' type='text/css' href='assets/style.css'>
+    <link rel='icon' href='assets/favicon.ico' type='image/x-icon'>
+    <link rel='shortcut icon' href='assets/favicon.ico' type='image/x-icon'>
+</head>
+<body onbeforeunload='return check_cf();' onload='doOnload();' onclick='doOnBodyClick();'
+      id='focusBody' class='Package_SIS'>
+<div id='XMLHttpRequestResult' style='display:none;margin-top:10px;background-color:white;'></div>
+<div id="Migoicons" class="unreset"
+     style="visibility:hidden;position:absolute;z-index:1000;top:-100"></div>
+<script>
+    var TipId = "Migoicons";
+    var FiltersEnabled = 1;
+    mig_clay();
+</script>
+<TABLE style="position:absolute;left:-1000px;">
+    <TR id=width_sizer></TR>
+</TABLE>
+<DIV ID=wrap>
+    <DIV ID=BodyDivContainer class='BodyDiv' style='margin:0px;padding:0px;' width=100%>
+        <style>
+            #Top_Icon {
+                display: table;
+                height: 45px;
+                background-color: #DEDEDE;
+                overflow: hidden;
+            }
+
+            #Top_Icon > a {
+                display: table-cell;
+                width: 100px;
+                height: 100%;
+                padding: 5px;
+                vertical-align: middle;
+                z-index: 1;
+            }
+
+            #Top_Icon > .side_display {
+                display: table-cell;
+                width: 100%;
+                height: 45px;
+                vertical-align: middle;
+            }
+
+            #Top_Icon > .side_display .messaging {
+                width: 45px;
+                position: absolute;
+                right: 0px;
+                bottom: 0px;
+                top: 0px;
+                border-left: outset #777 1px;
+                text-align: center;
+                cursor: pointer;
+            }
+
+            #menu {
+                white-space: nowrap;
+            }
+
+            /*Remove this line if you want menu items to wrap if the screen is too small*/
+            #menu {
+                position: relative;
+                z-index: 2;
+                height: 26px;
+                line-height: 25px;
+                border-top: 1px solid #3366FF;
+                background: #3366FF url(assets/themes/Default/bg.png) repeat-x;
+                vertical-align: top;
+                font-family: Myriad Pro Semi Bold, Verdana, Tahoma, sans-serif;
+                zoom: 1
+            }
+
+            #menu > span, #menu > a {
+                position: relative;
+                display: inline-block;
+                height: 100%;
+                margin: 0;
+                padding: 0 5px;
+                border-right: 1px solid #3366FF;
+                background-color: inherit;
+                background-image: inherit;
+                background-repeat: inherit;
+                color: #222;
+                font-weight: bold;
+                font-size: 11px;
+                cursor: pointer;
+                white-space: nowrap
+            }
+
+            #menu > a {
+                padding: 0 3px;
+                white-space: nowrap;
+                text-decoration: none
+            }
+
+            #menu > .current {
+                background: #AAA url(assets/themes/Default/bg.png) repeat-x
+            }
+
+            #menu img {
+                display: block;
+                float: left;
+                position: relative;
+                top: 4px;
+                margin-right: 3px
+            }
+
+            #menu q {
+                position: absolute;
+                display: none;
+                top: 100%;
+                left: -1px;
+                border: 1px solid #3366FF;
+                border-top: 0;
+                background: #EEE;
+                font-weight: normal;
+                font-size: 12px;
+                color: #000;
+                overflow: auto;
+                border-radius: 0 0 5px 5px;
+                opacity: 0.95
+            }
+
+            #menu b {
+                border-top: 1px solid #3366FF;
+                cursor: default
+            }
+
+            #menu b, #menu > span a {
+                position: relative;
+                display: block;
+                min-width: 200px;
+                height: 16px;
+                line-height: 16px;
+                padding: 0 3px;
+                white-space: nowrap;
+                text-decoration: none;
+                color: #000;
+                overflow: hidden
+            }
+
+            #menu q a: hover {
+                background-color: #3366FF;
+                color: #FFF
+            }
+
+            #menu q a.current {
+                font-weight: bold
+            }
+
+            #menu q b: first-child {
+                border-top: 0
+            }
+
+            #menu.size q {
+                position: fixed;
+                display: block;
+                visibility: hidden
+            }
+
+            #menu .show {
+                background: #3366FF !important;
+                background-image: none;
+                color: #FFF;
+                display: inline-block !important;
+            }
+
+            #menu .show > q {
+                display: block
+            }
+
+            #menu > br {
+                clear: both
+            }
+
+            .DarkGradientBG {
+                background-image: url(assets/themes/Default/bg_dark.jpg);
+                padding: 0.2em;
+            }
+
+            .EntireBox {
+                border: 1px solid #3366FF !important
+            }
+
+            .BoxContent {
+                background-color: #FFF;
+                border: 1px solid #3366FF
+            }
+
+            .BoxContentDiv {
+                padding: 5px
+            }
+
+            .BoxContentBackground {
+                background-color: #FFF
+            }
+
+            td.BoxHeading {
+                background: #3366FF url('assets/jquery/ui.themes/redmond/images/ui-bg_gloss-wave_alpha_500x100.png') 50% 50% repeat-x;
+                border-color: #3366FF
+            }
+
+            td.BoxHeading {
+                background: #3366FF url('assets/jquery/ui.themes/redmond/images/ui-bg_gloss-wave_alpha_500x100.png') 50% 50% repeat-x;
+                border-color: #3366FF
+            }
+
+            tr.BoxHeading {
+                background: #3366FF url('assets/jquery/ui.themes/redmond/images/ui-bg_gloss-wave_alpha_500x100.png') 50% 50% repeat-x !important;
+            }
+
+            .PopTable .ui-tabs, .ui-tabs-panel {
+                padding: 0px !important;
+                margin: 0px;
+            }
+
+            .PopTable .ui-tabs-nav {
+                font-size: 0.75em;
+            }
+
+            .PopTable .ui-state-active a, .ui-state-active a: link, .ui-state-active a: visited {
+                color: #333;
+                font-family: "Verdana", "Arial", sans-serif;
+            }
+
+            .PopTable .ui-tabs-nav li a {
+                padding: .25em .5em;
+            }
+
+            .PopTable .ui-widget-header {
+                border-color: #3366FF;
+                background: #3366FF url("assets/jquery/ui.themes/redmond/images/ui-bg_gloss-wave_alpha_500x100.png") 50% 50% repeat-x !important;
+            }
+
+            .PopTable, .PopTable .ui-state-default {
+                border-color: #3366FF;;
+            }
+
+            .hilite {
+                background-color: #749FFF !important
+            }
+
+            .hilite1 {
+                background-color: #749FFF !important
+            }
+
+            .hil_row {
+                background-color: #749FFF !important
+            }
+
+            .GradebookHighlight {
+                background-color: #749FFF !important
+            }
+
+            .select-free {
+                width: 350px; /*must have for any value*/;
+            }
+
+            #Page_Content, #print_iframe {
+                position: absolute;
+                top: 72px;
+                bottom: 25px !important;
+            }
+
+            .print_iframe {
+                width: 100%;
+                z-index: 1
+            }
+
+            #kill_iframe {
+                position: absolute;
+                line-height: 42px;
+                height: 42px;
+                font-weight: bold;
+                size: 24px;
+                left: 20px;
+                vertical-align: middle;
+                top: 91px;
+                z-index: 100;
+                cursor: pointer
+            }
+
+            #Ajax_Loading {
+                top: 71px
+            }
+
+            #plugin_notice {
+                background: #749FFF;
+                padding: 50px;
+                position: absolute;
+                display: block;
+                left: 50%;
+                top: 150px;
+                height: 200px;
+                width: 400px;
+                margin-left: -200px;
+                border: 2px solid #04316C
+            }
+        </style>
+
+        <div id="Top_Icon">
+            <a class="logo-link" href="Modules.php?modname=misc/Portal.php"><img
+                    src="assets/themes/Default/logo.png"></a>
+            <div class="side_display">
+                <form id='redirects' action='Modules.php?modname=misc/Portal.php' method='POST'>
+                    <ul id='Top_Right'>
+                        <li class="Header_Top_Right_Option Header_Top_Right_Option_First"><B>John
+                            Doe</B></li>
+                        <li class='finance-hidden Header_Top_Right_Option'>Paxon Advanced Studies -
+                            0751
+                        </li>
+                        <li class='finance-hidden Header_Top_Right_Option'><SELECT name=side_syear
+                                                                                   class='swiftbox'
+                                                                                   onChange='document.forms[0].submit();'>
+                            <OPTION value=2010>2010-2011</OPTION>
+                            <OPTION value=2011>2011-2012</OPTION>
+                            <OPTION value=2012>2012-2013</OPTION>
+                            <OPTION value=2013>2013-2014</OPTION>
+                            <OPTION value=2014>2014-2015</OPTION>
+                            <OPTION value=2015 SELECTED>2015-2016</OPTION>
+                            <OPTION value=2016>2016-2017</OPTION>
+                        </SELECT></li>
+                        <li class='finance-hidden Header_Top_Right_Option'>
+                            <SELECT name=side_mp class='swiftbox'
+                                    onChange='document.forms[0].submit();'>
+                                <optgroup label="Quarters">
+                                    <OPTION value="101261">Quarter 1</OPTION>
+                                    <OPTION value="101262" SELECTED>Quarter 2</OPTION>
+                                    <OPTION value="101263">Quarter 3</OPTION>
+                                    <OPTION value="101264">Quarter 4</OPTION>
+                                </optgroup>
+                                <optgroup label="Progress Periods">
+                                    <option value="101265">Progress Period 1</option>
+                                    <option value="101266">Progress Period 2</option>
+                                    <option value="101267">Progress Period 3</option>
+                                    <option value="101268">Progress Period 4</option>
+                                </optgroup>
+
+                            </SELECT>
+                        </li>
+                    </ul>
+                </FORM>
+            </div>
+        </div>
+        <div id="menu" class="size">
+<span class='current'>
+<img src='modules/School_Setup/School_Information.png'> School Information
+<q><a class='current' href='Modules.php?modname=misc/Portal.php'>&rsaquo; Portal</a><a class=''
+                                                                                       href='Modules.php?modname=School_Setup/Schools.php'>&rsaquo;
+    School Information</a><a class='' href='Modules.php?modname=School_Setup/Calendar.php'>&rsaquo;
+    Calendar</a></q>
+</span><span class=''>
+<img src='modules/Students/students_icon.png'> My Information
+<q><a class='' href='Modules.php?modname=Users/Preferences.php'>&rsaquo; Preferences</a><a class=''
+                                                                                           href='Modules.php?modname=Scheduling/Schedule.php'>&rsaquo;
+    Class Schedule / Registration</a></q>
+</span><span class=''>
+<img src='modules/Grades/Grades.png'> Assignments & Grades
+<q><a class=''
+      href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758158'>&rsaquo; IB
+    CHEMISTRY - 01 01 - A - 181 - Teacher A</a><a class=''
+                                                  href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758639'>&rsaquo;
+    IB PSYCHOLOG - 02 02 - A - 181 - Teacher B</a><a class=''
+                                                     href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758045'>&rsaquo;
+    IB LATIN 3 - 03 03 - A - 381 - Teacher C</a><a class=''
+                                                   href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758873'>&rsaquo;
+    AP PHYSICS C - 04 04 - A - 001 - Teacher D</a><a class=''
+                                                     href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=997000'>&rsaquo;
+    IB THEORY/KN - 05 05 - B - 184 - Teacher E</a><a class=''
+                                                     href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758011'>&rsaquo;
+    AP U.S. HIST - 06 06 - B - 082 - Teacher F</a><a class=''
+                                                     href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758027'>&rsaquo;
+    Advanced Placement English Language And Composition - 07 07 - B - 082 - Teacher G</a><a class=''
+                                                                                            href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=996998'>&rsaquo;
+    Advanced Placement Calculus Ab - 08 08 - B - 003 - Teacher H</a></q>
+</span></div>
+
+
+        <div class="focus-footer">
+            <div class="focus-footer-table">
+                <div class="focus-footer-cell align-left">
+                    <div class="inline-block align-left">
+                    </div>
+                </div>
+
+                <div class="focus-footer-cell align-center">
+                    <div class="inline-block align-left">
+                        <a class="footer-button student-list-button plain link hidden" href="">
+                            Back to Student List
+                        </a>
+
+
+                        <button type="button" class="footer-button print-button plain link hidden">
+                            Print
+                        </button>
+                        <a class="footer-button create-report-button plain link hidden"
+                           href="Modules.php?modname=Reports/SavedReports.php&modfunc=new">
+                            Create Report
+                        </a>
+
+                        <button type="button" class="footer-button unlock-button plain link hidden">
+                            Unlock
+                        </button>
+                    </div>
+                </div>
+
+                <div class="focus-footer-cell align-right">
+                    <div class="inline-block align-left">
+                        <!-- ko with: alertModule -->
+                        <button type="button" class="footer-button chat-button plain link"
+                                data-bind="click:toggleMessageBoard">
+                            <img class="chat-icon"
+                                 data-bind="attr:{src:alerts().length > 0 ? 'assets/messages.png' : 'assets/messages_no.png'}">
+                            <span data-bind="html:'Messenger'"></span>
+                            <span data-bind="visible:alerts().length>0, text:'(' + alerts().length + ')'"></span>
+                        </button>
+                        <!-- /ko -->
+
+                        <button type="button" class="footer-button help-button plain link">
+                            Help
+                        </button>
+
+                        <a class="footer-button logout-button plain link" href="index.php?logout">
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="focus-modal-template" class="focus-modal hidden">
+                <div class="focus-modal-overlay"></div>
+
+                <div class="focus-modal-container">
+                    <div class="focus-modal-close-button">
+                        X
+                    </div>
+
+                    <div class="focus-modal-content"></div>
+                </div>
+            </div>
+
+            <script>
+                (function () {
+                    if (Focus && Focus.PrintController) {
+                        Focus.PrintController.post_string = {
+                            "modname": "misc\/Portal.php",
+                            "side_mp": "101262",
+                            "search_modfunc": "list"
+                        };
+                    }
+                }());
+            </script>
+
+            <div class="focus-print focus-modal-hidden">
+                <iframe class="focus-print-iframe"></iframe>
+            </div>
+
+            <form class="focus-print-options reset-form hidden">
+                <h1 class="focus-print-options-header">Print Options</h1>
+
+                <div>
+                    <div class="focus-print-label-text">
+                        Template:
+                    </div>
+
+                    <select class="focus-print-option-template">
+                        <option value=""></option>
+
+                        <option value='30'>DCPS Transcript</option>
+                        <option value='24'>Detailed DOP Letterhead</option>
+                        <option value='10'>Duval County Magnet Application Form</option>
+                        <option value='15'>Duval County Public Schools</option>
+                        <option value='13'>Duval County report card</option>
+                        <option value='22'>Duval Letterhead</option>
+                        <option value='12'>Duval secondary report card</option>
+                        <option value='27'>ESE Student Course Schedule</option>
+                        <option value='17'>Full time equivalency funding gained from other schools
+                        </option>
+                        <option value='18'>Full time equivalency student funding record ESE134- Part
+                            1 (second school)
+                        </option>
+                        <option value='16'>Full time equivalency students receiving less then
+                            fullfunding
+                        </option>
+                        <option value='20'>Full Time Equivalency students receiving more then full
+                            funding
+                        </option>
+                        <option value='31'>Landscape</option>
+                        <option value='6'>Parent/Legal Guardian letter 2</option>
+                        <option value='4'>Parent/Legal Guardian Notification Letter</option>
+                        <option value='14'>Progress report</option>
+                        <option value='8'>Referral Form</option>
+                        <option value='21'>Schedule Letterhead</option>
+                        <option value='19'>School Funding Certificate</option>
+                        <option value='11'>Stay Away Agreement</option>
+                        <option value='26'>Student Detail ELL</option>
+                        <option value='25'>Student FCAT Attendance</option>
+                        <option value='29'>Transcript</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>
+                        <div class="focus-print-label-text">
+                            Small Font:
+                        </div>
+
+                        <input type="checkbox" class="focus-print-option-small">
+                    </label>
+                </div>
+            </form>
+
+            <div class="focus-help focus-modal-hidden">
+                <div class="focus-help-iframe-container">
+                    <iframe class="focus-help-iframe"></iframe>
+                </div>
+
+                <form class="focus-help-preferences reset-form">
+                    <div class="focus-help-new-window-container">
+                        <a class="focus-help-new-window"
+                           href="https://focusulms.focusschoolsoftware.com/focus/FocusUniversity/index.php?program=misc/Portal.php&profile=student&fullpage=1"
+                           target="_blank">Open in a new window</a>
+                    </div>
+
+                    <div class="focus-help-label">
+                        Choose the role that best describes your job: <select name="role">
+                        <option value='0' selected>Teacher</option>
+                        <option value='1'>School Administrator</option>
+                        <option value='2'>Guidance</option>
+                        <option value='3'>District Administrator</option>
+                        <option value='4'>Medical</option>
+                        <option value='5'>Data Entry</option>
+                        <option value='6'>Special Programs</option>
+                    </select>
+                    </div>
+
+                    <div>
+                        <label>
+                            <input type="checkbox" name="newsletter" value="1">
+                            Subscribe to the quarterly Focus University Newsletter
+                        </label>
+                    </div>
+
+                    <div>
+                        <label>
+                            <input type="checkbox" name="notifications" value="1">
+                            Receive notifications of training opportunities
+                        </label>
+                    </div>
+
+                    <input type="hidden" name="focus_university_action" value="update">
+                </form>
+            </div>
+
+            <script>
+                // Focus.HelpController is defined in help.js
+                Focus.HelpController.initialized = true;
+                Focus.HelpController.base_url = 'https://focusulms.focusschoolsoftware.com/focus/FocusUniversity/';
+                Focus.HelpController.moodle_help_url = 'https://training.focusschoolsoftware.com/moodle/focus_help.php?program=misc/Portal.php&profile=student';
+                Focus.HelpController.moodle_base_url = 'https://training.focusschoolsoftware.com/moodle/';
+                Focus.HelpController.help_url = 'https://focusulms.focusschoolsoftware.com/focus/FocusUniversity/index.php?program=misc/Portal.php&profile=student';
+                Focus.HelpController.profile = 'student';
+                Focus.HelpController.modname = 'misc/Portal.php';
+                Focus.HelpController.session_url = 'FocusUniversity.php?focus_university_action=sessionkey';
+                Focus.HelpController.client_id = '20870';
+            </script>
+
+            <script type="text/javascript">
+                window.Focus = window.Focus || {};
+                Focus.AJAXURL = Focus.AJAXURL || "Modules.php?modname=misc/Portal.php&ajax=true";
+
+                try {
+                    if ('help' in parent) {
+                        var expanded = parent.help.location.href.search(/expanded=true/i);
+                        if (expanded > 0) {
+                            var requests = parent.help.location.href.substring(parent.help.location.href.indexOf('?') + 1).split("&");
+                            var element;
+                            var append_req = "";
+                            for (var i = 0; i < requests.length; i++) {
+                                if (requests[i].search(/portal/i) == -1) {
+                                    append_req += requests[i] + "&";
+                                }
+                            }
+                            if (append_req != "") {
+                                append_req = append_req.substring(0, append_req.length - 1);
+                            }
+
+                            parent.help.location = 'Bottom.php?' + append_req + '&portal=true';
+                        }
+                    }
+                } catch (e) {
+                }
+            </script>
+        </div>
+
+        <div id="ajaxError" class="section hidden" data-label="Error">
+            <div id="ajaxErrorClose"></div>
+            <div id="ajaxErrorMessage"></div>
+        </div>
+        <div class="login-as-popup focus-modal-hidden">
+            <h2>Log In As: </h2>
+            <select class="swiftbox login-as"></select>
+        </div>
+        <div style=position: relative: height: 0px;width: 0px;>
+            <DIV ID='Ajax_Loading'><span id='Ajax_Loading_Span'><!--LOADING<BR><img src=assets/loading.gif width=128px;>--></span>
+            </DIV>
+        </div>
+        <DIV ID='Ajax_Loader'>
+            <DIV ID='Page_Content' class='page-content '>
+                <div id="dwtcontrolContainer" class="DWTContainer"
+                     style="position:absolute;left:-1000px;"></div>
+                <TABLE width=100% border=0 cellpadding=0 cellspacing=0
+                       class="DarkGradientBG BottomButton">
+                    <TR>
+                        <TD class="DarkGradientBG BottomButton" align=left> &nbsp;<font
+                                color=#000000><B><img
+                                src="modules/School_Setup/School_Information.png" border=0><IMG
+                                SRC=assets/pixel_trans.gif height=1 width=4><font size=+1>&nbsp;
+                            &nbsp; &nbsp; Welcome, John Doe</font></B></font></TD>
+                        <TD align=right class="DarkGradientBG BottomButton" valign=top
+                            style="padding-right:5px;"><font color=#000000><B>Last login: Sunday, 9:
+                            03pm</B></font></TD>
+                    </TR>
+                </TABLE>
+                <table border="0" cellspacing="0" cellpadding="0" class="Portal_Table"
+                       style="width:100%; height: 10px;">
+                    <colgroup>
+                        <col width='33%' style='max-width: 33%'>
+                        <col width='33%' style='max-width: 33%'>
+                        <col width='33%' style='max-width: 33%'>
+                    </colgroup>
+                    <tr>
+                        <td class='portal_block_Alerts' valign='top' height='100% ' colspan='1'
+                            rowspan='1'>
+                            <style>
+                                .alert {
+                                    color: #DD0 !important;
+                                    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+                                }
+                            </style>
+                            <script>
+                                $("body").on("click", ".viewTA", function () {
+                                    viewFasTest(this);
+                                });
+
+                                function viewFasTest(element) {
+                                    var shrink_width = 500;
+                                    if (viewFasTest.active_fas == undefined)
+                                        viewFasTest.active_fas = '';
+
+                                    element = $(element);
+                                    element.removeClass('alert');
+                                    var $form = $("<form></form>");
+                                    $form.attr("method", "GET");
+                                    $form.attr("action", "Modules.php");
+                                    var html = '';
+                                    var data = element.data();
+
+                                    for (var i in data) {
+                                        html += '<input type="hidden" name="' + i + '" value="' + data[i] + '">';
+                                    }
+                                    $form.html(html);
+                                    if (this.active_fas == data.fas_test_id + '_' + data.student_id)
+                                        return true;
+                                    viewFasTest.active_fas = data.fas_test_id + '_' + data.student_id;
+                                    active_gradebook_assignment = data.gradebook_assignment_id;
+
+                                    if ($('#textview').length == 0) {
+                                        $('#Page_Content').width(($('#Page_Content').width() - shrink_width));
+                                        $('#Ajax_Loader').append('<div id="textview" style="border-left:solid black 1px;width:499px;right:0px;top:0px;bottom:0px;position:absolute;"></div>');
+                                    }
+                                    $form.appendTo('body');
+                                    $('#textview,#questionitems').html('');
+
+                                    $.ajax({
+                                        url: 'Modules.php',
+                                        data: merge_options(data, {
+                                            'modname': 'Focus_Assessment_System/PostComment.php',
+                                            'remove_alerts': true,
+                                            '_FOCUS_PDF': 'true'
+                                        }),
+                                        type: 'POST',
+                                        dataType: 'html',
+                                        success: function (data) {
+                                            console.log(data)
+                                        }
+                                    });
+                                    function merge_options(obj1, obj2) {
+                                        var obj3 = {};
+                                        for (var attrname in obj1) {
+                                            obj3[attrname] = obj1[attrname];
+                                        }
+                                        for (var attrname in obj2) {
+                                            obj3[attrname] = obj2[attrname];
+                                        }
+                                        return obj3;
+                                    }
+
+                                    $form.iframePreview({
+                                        killText: 'Close Test',
+                                        complete: function () {
+                                            handleContainerResize();
+                                            element.closest('TR.lo_row').find('.jsPointsCell .clickable').click();
+                                        },
+                                        appendID: 'textview',
+                                        close: function () {
+                                            $form.remove();
+                                            $('#textview,#questionitems').remove();
+                                            $('#Page_Content').width('100%');
+                                            handleContainerResize();
+                                            viewFasTest.active_fas = '';
+                                        },
+                                    });
+                                }
+
+                                $("body").on("focus", ".jsPointsCell input", function () {
+                                    if ($('#textview').length > 0) {
+                                        $(this).closest('TR.lo_row').find('.viewTA').trigger('click');
+                                    }
+                                });
+                            </script>
+
+                            <style type='text/css'>
+                                div[id^="divtrigger_event_options"] {
+                                    display: inline;
+                                }
+
+                                .number[id^="inputtrigger_event_options"] {
+                                    width: 30px;
+                                }
+                            </style>
+                            <TABLE class="Box" cellspacing="0" cellpadding="0" width=100%
+                                   height=100%>
+                                <TR>
+                                    <TD class="BoxHeading">Alerts - Since you last logged in:</TD>
+                                </TR>
+                                <TR>
+                                    <TD class="BoxContent" valign="Top"><a
+                                            href='Modules.php?modname=Users/Preferences.php&system_tab=&tab=notifications'>
+                                        <img src='modules/Students/students_icon.png' border='0'>
+                                        You are not set to receive email notifications.</a><br><BR/><BR/>
+                                        <div data-bind="with: alertModule"
+                                             id="messenger_alert_portal">
+                                            <div id="messenger_alert_portal_alerts"
+                                                 style="display:none;"
+                                                 data-bind="visible:messageAlerts().length > 0">
+                                                <div id="messenger_alert_portal_alert_title"
+                                                     data-bind="click:toggleMessageBoard">
+                                                    New Messenger Alerts <img
+                                                        src="assets/messages.png" border="0"
+                                                        vspace="0"
+                                                        style="height:17px;vertical-align:middle;"
+                                                        alt="Open Messenger Portal">
+                                                </div>
+                                                <UL data-bind="foreach: messageAlerts">
+                                                    <li style="height:30px;position:relative;"
+                                                        data-bind="{click:$root.alertModule.handleAlertClick}"
+                                                        style="position:relative;">
+                                                        <div data-bind="if:$data.user_id.substring(0,1)=='s'"
+                                                             style="position:absolute;top:0px;left:0px;width:30px;height:30px;overflow:hidden;">
+                                                            <img data-bind="attr:{src:getImage}, event:{error:noImage.bind({}, $element)}"
+                                                                 style="width:30px">
+                                                        </div>
+                                                        <span style="padding-left:10px;"
+                                                              data-bind="text: $data.name, style:{marginLeft:$data.user_id.substring(0,1)=='s' ? '21px' : '0px' }"></span><BR>
+                                                        <span class="alert_type"
+                                                              data-bind="html: getAlertType(), style:{marginLeft:$data.user_id.substring(0,1)=='s' ? '21px' : '0px' }"></span>
+                                                        <div class="online_status"
+                                                             data-bind="style:{ backgroundColor: $root.onlinePersons.checkOnline($data.user_id) ? '#0C0' : '#F00' }"></div>
+                                                    </li>
+                                                </UL>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </TABLE>
+                        </td>
+                        <td class='portal_block_Messages' valign='top' height='100% ' colspan='1'
+                            rowspan='1'>
+                            <TABLE class="Box" cellspacing="0" cellpadding="0" width=100%
+                                   height=100%>
+                                <TR>
+                                    <TD class="BoxHeading">Messages</TD>
+                                </TR>
+                                <TR>
+                                    <TD class="BoxContent" valign="Top"></td>
+                                </tr>
+                            </TABLE>
+                        </td>
+                        <td class='portal_block_Upcoming Events' valign='top' height='100% '
+                            colspan='1' rowspan='1'>
+                            <TABLE class="Box" cellspacing="0" cellpadding="0" width=100%
+                                   height=100%>
+                                <TR>
+                                    <TD class="BoxHeading">Upcoming Events - <A
+                                            HREF=Modules.php?modname=School_Setup/Calendar.php>View
+                                        Calendar</A></TD>
+                                </TR>
+                                <TR>
+                                    <TD class="BoxContent" valign="Top">
+                                        <TABLE class=BoxContents>
+                                            <TR>
+                                                <TD valign=middle><IMG SRC=assets/arrow_right.gif
+                                                                       id=calendar239_arrow></TD>
+                                                <TD><A HREF=#
+                                                       onclick='switchMenu("calendar239");'><font
+                                                        color=gray style="text-decoration:none;">
+                                                    <!-- 20151228 -->Dec 28, 2015: </font><B>Winter
+                                                    Break - School Closed</B></A>
+                                                    <DIV id=calendar239 style='display:none;'></DIV>
+                                                </TD>
+                                            </TR>
+                                        </TABLE>
+                                        <TABLE class=BoxContents>
+                                            <TR>
+                                                <TD valign=middle><IMG SRC=assets/arrow_right.gif
+                                                                       id=calendar240_arrow></TD>
+                                                <TD><A HREF=#
+                                                       onclick='switchMenu("calendar240");'><font
+                                                        color=gray style="text-decoration:none;">
+                                                    <!-- 20151229 -->Dec 29, 2015: </font><B>Winter
+                                                    Break - School Closed</B></A>
+                                                    <DIV id=calendar240 style='display:none;'></DIV>
+                                                </TD>
+                                            </TR>
+                                        </TABLE>
+                                        <TABLE class=BoxContents>
+                                            <TR>
+                                                <TD valign=middle><IMG SRC=assets/arrow_right.gif
+                                                                       id=calendar241_arrow></TD>
+                                                <TD><A HREF=#
+                                                       onclick='switchMenu("calendar241");'><font
+                                                        color=gray style="text-decoration:none;">
+                                                    <!-- 20151230 -->Dec 30, 2015: </font><B>Winter
+                                                    Break - School Closed</B></A>
+                                                    <DIV id=calendar241 style='display:none;'></DIV>
+                                                </TD>
+                                            </TR>
+                                        </TABLE>
+                                        <TABLE class=BoxContents>
+                                            <TR>
+                                                <TD valign=middle><IMG SRC=assets/arrow_right.gif
+                                                                       id=calendar242_arrow></TD>
+                                                <TD><A HREF=#
+                                                       onclick='switchMenu("calendar242");'><font
+                                                        color=gray style="text-decoration:none;">
+                                                    <!-- 20151231 -->Dec 31, 2015: </font><B>Winter
+                                                    Break - School Closed</B></A>
+                                                    <DIV id=calendar242 style='display:none;'></DIV>
+                                                </TD>
+                                            </TR>
+                                        </TABLE>
+                                        <TABLE class=BoxContents>
+                                            <TR>
+                                                <TD valign=middle><IMG SRC=assets/arrow_right.gif
+                                                                       id=calendar133_arrow></TD>
+                                                <TD><A HREF=#
+                                                       onclick='switchMenu("calendar133");'><font
+                                                        color=gray style="text-decoration:none;">
+                                                    <!-- 20160101 -->Jan 1, 2016: </font><B>New
+                                                    Year's Day - Winter Break</B></A>
+                                                    <DIV id=calendar133
+                                                         style='display: none;'></DIV>
+                                                </TD>
+                                            </TR>
+                                        </TABLE>
+                                        <TABLE class=BoxContents>
+                                            <TR>
+                                                <TD valign=middle><IMG SRC=assets/arrow_right.gif
+                                                                       id=calendar134_arrow></TD>
+                                                <TD><A HREF=#
+                                                       onclick='switchMenu("calendar134");'><font
+                                                        color=gray style="text-decoration:none;">
+                                                    <!-- 20160106 -->Jan 6, 2016: </font><B>Early
+                                                    Dismissal </B></A>
+                                                    <DIV id=calendar134
+                                                         style='display: none;'></DIV>
+                                                </TD>
+                                            </TR>
+                                        </TABLE>
+                                        <TABLE class=BoxContents>
+                                            <TR>
+                                                <TD valign=middle><IMG SRC=assets/arrow_right.gif
+                                                                       id=calendar135_arrow></TD>
+                                                <TD><A HREF=#
+                                                       onclick='switchMenu("calendar135");'><font
+                                                        color=gray style="text-decoration:none;">
+                                                    <!-- 20160118 -->Jan 18, 2016: </font><B>ML King
+                                                    Birthday - Holiday</B></A>
+                                                    <DIV id=calendar135
+                                                         style='display: none;'></DIV>
+                                                </TD>
+                                            </TR>
+                                        </TABLE>
+                                    </td>
+                                </tr>
+                            </TABLE>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='portal_block_Featured Programs' valign='top' height='100% '
+                            colspan='2' rowspan='1'>
+                            <script src="assets/DisableDoubleClicks.js"></script>
+                            <script>
+                                // Disable clicks for 3 seconds each time link is clicked
+                                $(function () {
+                                    DisableDoubleClicks(3);
+                                });
+                            </script>
+                            <TABLE class="Box" cellspacing="0" cellpadding="0" width=100%
+                                   height=100%>
+                                <TR>
+                                    <TD class="BoxHeading">Featured Programs</TD>
+                                </TR>
+                                <TR>
+                                    <TD class="BoxContent" valign="Top">
+                                        <table>
+                                            <tr>
+                                                <td valign="top">
+                                                    <table class="BoxContents">
+                                                        <tr>
+                                                            <td colspan='4'></td>
+                                                            <td>Select teachers to Message:</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/Grades/Grades.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758158'><b>IB
+                                                                    CHEMISTRY - 01 01 - A - 181 -
+                                                                    Teacher A</b></a>
+                                                            <td></td>
+                                                            <td nowrap>
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758158'>100%&nbsp;A</a>
+                                                            </td>
+                                                            <td><label><input type=checkbox
+                                                                              class=EmailTeacher
+                                                                              value="ta@duvalschools.org">
+                                                                ta0@duvalschools.org</label></td>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/Grades/Grades.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758639'><b>IB
+                                                                    PSYCHOLOG - 02 02 - A - 181 -
+                                                                    Teacher B</b></a>
+                                                            <td></td>
+                                                            <td nowrap>
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758639'>99%&nbsp;B</a>
+                                                            </td>
+                                                            <td><label><input type=checkbox
+                                                                              class=EmailTeacher
+                                                                              value="tb@duvalschools.org">
+                                                                tb@duvalschools.org</label></td>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/Grades/Grades.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758045'><b>IB
+                                                                    LATIN 3 - 03 03 - A - 381 -
+                                                                    Teacher C</b></a>
+                                                            <td></td>
+                                                            <td nowrap>
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758045'>88%&nbsp;A</a>
+                                                            </td>
+                                                            <td><label><input type=checkbox
+                                                                              class=EmailTeacher
+                                                                              value="tc@duvalschools.org">
+                                                                tc@duvalschools.org</label></td>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/Grades/Grades.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758873'><b>AP
+                                                                    PHYSICS C - 04 04 - A - 001 -
+                                                                    Teacher D</b></a>
+                                                            <td></td>
+                                                            <td nowrap>
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758873'>77%&nbsp;D</a>
+                                                            </td>
+                                                            <td><label><input type=checkbox
+                                                                              class=EmailTeacher
+                                                                              value="td@duvalschools.org">
+                                                                td@duvalschools.org</label></td>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/Grades/Grades.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=LMS/ViewLesson.php&course_period_id=997000'><b>IB
+                                                                    THEORY/KN - 05 05 - B - 184 -
+                                                                    Teacher E</b></a>
+                                                            <td></td>
+                                                            <td nowrap>
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=997000'>66%&nbsp;A</a>
+                                                            </td>
+                                                            <td><label><input type=checkbox
+                                                                              class=EmailTeacher
+                                                                              value="te@duvalschools.org">
+                                                                te@duvalschools.org</label></td>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/Grades/Grades.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758011'><b>AP
+                                                                    U.S. HIST - 06 06 - B - 082 -
+                                                                    Teacher F</b></a>
+                                                            <td></td>
+                                                            <td nowrap>
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758011'>55%&nbsp;B</a>
+                                                            </td>
+                                                            <td><label><input type=checkbox
+                                                                              class=EmailTeacher
+                                                                              value="tf@duvalschools.org">
+                                                                tf@duvalschools.org</label></td>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/Grades/Grades.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758027'><b>Advanced
+                                                                    Placement English Language And
+                                                                    Composition - 07 07 - B - 082 -
+                                                                    Teacher G</b></a>
+                                                            <td></td>
+                                                            <td nowrap>
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758027'>44%&nbsp;B</a>
+                                                            </td>
+                                                            <td><label><input type=checkbox
+                                                                              class=EmailTeacher
+                                                                              value="tg@duvalschools.org">
+                                                                tg@duvalschools.org</label></td>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/Grades/Grades.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=996998'><b>Advanced
+                                                                    Placement Calculus Ab - 08 08 -
+                                                                    B - 003 - Teacher H</b></a>
+                                                            <td></td>
+                                                            <td nowrap>
+                                                                <a href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=996998'>0%&nbsp;B</a>
+                                                            </td>
+                                                            <td><label><input type=checkbox
+                                                                              class=EmailTeacher
+                                                                              value="th@duvalschools.org">
+                                                                th@duvalschools.org</label></td>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/School_Setup/School_Information.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=School_Setup/Calendar.php'><b>Calendar</b></a>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='display:none'>Z</td>
+                                                            <TD valign=middle><img
+                                                                    src="modules/Students/students_icon.png"
+                                                                    border=0></td>
+                                                            <td>
+
+                                                                <a href='Modules.php?modname=Scheduling/Schedule.php'><b>Class
+                                                                    Schedule / Registration</b></a>
+                                                            </td>
+                                                            <td width='5'></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr></tr>
+                                                    </table>
+                                                </td>
+                                                <td>
+                                                    <form id='Email' style='display: none'>
+                                                        <table>
+                                                            <tr></tr>
+                                                            <tr>
+                                                                <td>Your Email Address</td>
+                                                                <td><input id='EmailFrom'
+                                                                           type='text' size='39'
+                                                                           value=''></td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>CC:</td>
+                                                                <td><input type='text' size='39'
+                                                                           id='EmailCC'></td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan='2'>
+                                                                    <label>
+                                                                        <input type=checkbox
+                                                                               id=EmailCopy>
+                                                                        Receive Personal Copy
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan='2'>
+                                                                    <textarea
+                                                                            style='width: 99%; height: 200px;'
+                                                                            id='EmailMessage'></textarea>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td align='center' colspan='2'>
+                                                                    <img id='EmailLoading'
+                                                                         src='assets/loading.gif'
+                                                                         style='display: none'>
+                                                                    <button id='EmailSubmit'
+                                                                            type='submit'>Send
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <br><a onclick="switchMenu('all_programs_table', 1000);"
+                                               style="cursor:pointer;">
+                                        <img src="assets/arrow_right.gif"
+                                             id="all_programs_table_arrow" width="17" height="17">
+                                        <b>View All Programs</b>
+                                    </a><br>
+
+                                        <div class="Floating" style="position: relative;">
+                                            <div id="all_programs_table"
+                                                 style="position: absolute; display: none; width: 100%;">
+                                                <div class="EntireBox" width="100%;">
+                                                    <div style='margin-top: 10px;'><img
+                                                            src='modules/School_Setup/School_Information.png'>
+                                                        <b>School Information</b>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 10px; margin-top: 5px;'>
+                                                            <b></b>
+                                                            <div class='BoxContents'
+                                                                 style='margin-left: 5px; margin-top: 2px;'>
+                                                                <b>&rsaquo;</b><a
+                                                                    href='Modules.php?modname=misc/Portal.php'>Portal</a>
+                                                            </div>
+                                                            <div class='BoxContents'
+                                                                 style='margin-left: 5px; margin-top: 2px;'>
+                                                                <b>&rsaquo;</b><a
+                                                                    href='Modules.php?modname=School_Setup/Schools.php'>School
+                                                                Information</a>
+                                                            </div>
+                                                            <div class='BoxContents'
+                                                                 style='margin-left: 5px; margin-top: 2px;'>
+                                                                <b>&rsaquo;</b><a
+                                                                    href='Modules.php?modname=School_Setup/Calendar.php'>Calendar</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div style='margin-top: 10px;'><img
+                                                            src='modules/Students/students_icon.png'>
+                                                        <b>My Information</b>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 10px; margin-top: 5px;'>
+                                                            <b></b>
+                                                            <div class='BoxContents'
+                                                                 style='margin-left: 5px; margin-top: 2px;'>
+                                                                <b>&rsaquo;</b><a
+                                                                    href='Modules.php?modname=Users/Preferences.php'>Preferences</a>
+                                                            </div>
+                                                            <div class='BoxContents'
+                                                                 style='margin-left: 5px; margin-top: 2px;'>
+                                                                <b>&rsaquo;</b><a
+                                                                    href='Modules.php?modname=Scheduling/Schedule.php'>Class
+                                                                Schedule / Registration</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div style='margin-top: 10px;'><img
+                                                            src='modules/Grades/Grades.png'> <b>Assignments
+                                                        & Grades</b>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 5px; margin-top: 2px;'>
+                                                            <b>&rsaquo;</b><a
+                                                                href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758158'>IB
+                                                            CHEMISTRY - 01 01 - A - 181 - Teacher
+                                                            A</a>
+                                                        </div>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 5px; margin-top: 2px;'>
+                                                            <b>&rsaquo;</b><a
+                                                                href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758639'>IB
+                                                            PSYCHOLOG - 02 02 - A - 181 - Teacher
+                                                            B</a>
+                                                        </div>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 5px; margin-top: 2px;'>
+                                                            <b>&rsaquo;</b><a
+                                                                href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758045'>IB
+                                                            LATIN 3 - 03 03 - A - 381 - Teacher
+                                                            C</a>
+                                                        </div>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 5px; margin-top: 2px;'>
+                                                            <b>&rsaquo;</b><a
+                                                                href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758873'>AP
+                                                            PHYSICS C - 04 04 - A - 001 - Teacher
+                                                            D</a>
+                                                        </div>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 5px; margin-top: 2px;'>
+                                                            <b>&rsaquo;</b><a
+                                                                href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=997000'>IB
+                                                            THEORY/KN - 05 05 - B - 184 - Teacher
+                                                            E</a>
+                                                        </div>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 5px; margin-top: 2px;'>
+                                                            <b>&rsaquo;</b><a
+                                                                href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758011'>AP
+                                                            U.S. HIST - 06 06 - B - 082 - Teacher
+                                                            F</a>
+                                                        </div>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 5px; margin-top: 2px;'>
+                                                            <b>&rsaquo;</b><a
+                                                                href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=758027'>Advanced
+                                                            Placement English Language And
+                                                            Composition - 07 07 - B - 082 - Teacher
+                                                            G</a>
+                                                        </div>
+                                                        <div class='BoxContents'
+                                                             style='margin-left: 5px; margin-top: 2px;'>
+                                                            <b>&rsaquo;</b><a
+                                                                href='Modules.php?modname=Grades/StudentGBGrades.php?course_period_id=996998'>Advanced
+                                                            Placement Calculus Ab - 08 08 - B - 003
+                                                            - Teacher H</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </td>
+                                </tr>
+                            </TABLE>
+                        </td>
+                        <td class='portal_block_TeacherWebPages' valign='top' height='100% '
+                            colspan='1' rowspan='1'>
+                            <TABLE class="Box" cellspacing="0" cellpadding="0" width=100%
+                                   height=100%>
+                                <TR>
+                                    <TD class="BoxHeading">Teacher Public Web Pages</TD>
+                                </TR>
+                                <TR>
+                                    <TD class="BoxContent" valign="Top"><a
+                                            href='/focus/TeacherWebPage.php?teacher=J'>J,
+                                        Teacher</a><br><a
+                                            href='/focus/TeacherWebPage.php?teacher=D'>D,
+                                        Teacher</a><br><a
+                                            href='/focus/TeacherWebPage.php?teacher=G'>G,
+                                        Teacher</a><br><a
+                                            href='/focus/TeacherWebPage.php?teacher=C'>C,
+                                        Teacher</a><br><a
+                                            href='/focus/TeacherWebPage.php?teacher=B'>B,
+                                        Teacher</a><br><a
+                                            href='/focus/TeacherWebPage.php?teacher=I'>I,
+                                        Teacher</a><br><a
+                                            href='/focus/TeacherWebPage.php?teacher=E'>E,
+                                        Teacher</a><br><a
+                                            href='/focus/TeacherWebPage.php?teacher=F'>F,
+                                        Teacher</a><br><a
+                                            href='/focus/TeacherWebPage.php?teacher=A'>A,
+                                        Teacher</a><br><a
+                                            href='/focus/TeacherWebPage.php?teacher=H'>H,
+                                        Teacher</a><br></td>
+                                </tr>
+                            </TABLE>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='portal_block_ ' valign='top' height='100% ' colspan='1'
+                            rowspan='1'></td>
+                        <td class='portal_block_ ' valign='top' height='100% ' colspan='1'
+                            rowspan='1'></td>
+                        <td class='portal_block_ ' valign='top' height='100% ' colspan='1'
+                            rowspan='1'></td>
+                    </tr>
+                    <tr>
+                        <td class='portal_block_ ' valign='top' height='100% ' colspan='1'
+                            rowspan='1'></td>
+                        <td class='portal_block_ ' valign='top' height='100% ' colspan='1'
+                            rowspan='1'></td>
+                        <td class='portal_block_ ' valign='top' height='100% ' colspan='1'
+                            rowspan='1'></td>
+                    </tr>
+                    <tr>
+                        <td class='portal_block_ ' valign='top' height='100% ' colspan='1'
+                            rowspan='1'></td>
+                        <td class='portal_block_ ' valign='top' height='100% ' colspan='1'
+                            rowspan='1'></td>
+                        <td class='portal_block_ ' valign='top' height='100% ' colspan='1'
+                            rowspan='1'></td>
+                    </tr>
+                </table>
+                <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                <script>
+                    $('.Portal_Dashboard_Table').each(function () {
+                        var height = $('body').height() - $(this).offset().top;
+                        if (height < $(this).height())
+                            height - $(this).height();
+                        $(this).css('min-height', height);
+                        function drawChart() {
+                            $('.google_graph').each(function () {
+                                var options = $(this).data('options');
+                                var wrapper = new google.visualization.ChartWrapper(options);
+                                window.chart_wrappers.push(wrapper);
+                                for (var i in window.chart_wrappers) {
+                                    window.chart_wrappers[i].draw();
+                                }
+                            });
+                        }
+
+                        google.load("visualization", "1", {packages: ["corechart"]});
+                        google.setOnLoadCallback(drawChart);
+                    });
+                    (function ($) {
+                        var addresses = $('#EmailAddressList');
+                        var email = $('#Email');
+                        var from = $('#EmailFrom');
+                        var cc = $('#EmailCC');
+                        var copy = $('#EmailCopy');
+                        var message = $('#EmailMessage');
+                        var loading = $('#EmailLoading');
+                        var submit = $('#EmailSubmit');
+                        var teachers = $('.EmailTeacher');
+
+                        teachers.change(function () {
+                            var checked = teachers.filter(':checked');
+                            if (checked.length > 0) email.show();
+                            else email.hide();
+                        });
+
+                        email.submit(function () {
+                            var to = [];
+                            teachers.filter(':checked').each(function () {
+                                to.push($(this).val())
+                            });
+                            to = JSON.stringify(to);
+
+                            if (message.val().length <= 0) alert('Please enter an email message.');
+                            else {
+                                loading.show();
+                                submit.hide();
+
+                                var reg =;
+                            /^
+                                ([A - Za - z0 - 9_\-\.])
+                                +\@([A - Za - z0 - 9_\-\.])
+                                +\.
+                                ([A - Za - z];
+                                {
+                                    2, 6
+                                }
+                            )
+                                $ /;
+                                if (reg.test(from.val()) == false) alert('Please double check your email address and ensure its accuracy.');
+                                else $.post(window.location.href, {
+                                    _FOCUS_PDF: 'Y',
+                                    email: 1,
+                                    from: from.val(),
+                                    cc: cc.val(),
+                                    copy: copy.is(':checked') ? 1 : 0,
+                                    to: to,
+                                    message: message.val()
+                                }, function (data) {
+                                    if ($.trim(data) != '1') alert($.trim(data));
+                                    else {
+                                        message.val('');
+                                        from.val('');
+                                        cc.val('');
+                                        addresses.val('');
+                                        copy.filter(':checked').click();
+                                        teachers.filter(':checked').click();
+                                        email.hide();
+                                        alert('Your message has been sent!');
+                                    }
+                                    loading.hide();
+                                    submit.show();
+                                });
+                            };;;;;;
+                            return false;
+                        });
+
+                        addresses.change(function () {
+                            from.val($(this).val());
+                        });
+
+                    })(jQuery);
+
+                </script>
+            </DIV>
+        </DIV><!---->
+        <style>
+            .focus-alert {
+                display: block;
+                padding-top: 31px;
+                min-width: 100px;
+                background: #EEF;
+                text-align: center;
+                overflow: auto;
+            }
+
+            .focus-alert .title {
+                position: absolute;
+                top: 0;
+                right: 0;
+                left: 0;
+                height: 30px;
+                line-height: 30px;
+                background: #DDE;
+                font-size: 18px;
+                font-weight: bold;
+                border-bottom: 1px solid #AAB;
+            }
+
+            .focus-alert .message {
+                display: block;
+                padding: 10px;
+                font-size: 16px;
+                line-height: 1.2em;
+            }
+
+            .focus-alert .button {
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
+
+            #keepalive-alert .seconds {
+                font-weight: bold;
+            }
+
+            #timeout-login input {
+                box-sizing: border-box;
+                display: block;
+                margin: 10px 0;
+                padding: 3px 2px;
+                width: 100%;
+                border: 1px solid #AAA;
+                background-color: #FFF:
+            }
+
+            #timeout-login .error {
+                margin: 10px;
+                height: 1.2em;
+                font-size: 13px;
+                color: #F00;
+            }
+        </style>
+        <div id="keepalive-alert" class="focus-alert focus-modal-hidden">
+            <div class="title">Attention</div>
+
+            <div class="message">
+                Your login session will time out in approximately
+                <span class="seconds"></span> second(s).
+            </div>
+
+            <button class="button">Stay Logged In</button>
+        </div>
+
+        <div id="session-alert" class="focus-alert focus-modal-hidden">
+            <div class="title">Attention</div>
+
+            <div class="message">
+                The student, school, year or marking period has been changed in a
+                different window or tab.<br>
+                Click the button below to revert your session options.
+            </div>
+
+            <button class="button">Recover Options</button>
+        </div>
+
+        <div id="timeout-login" class="focus-alert focus-modal-hidden">
+            <div class="title">Log In</div>
+
+            <form class="message" autocomplete="off">
+                <div>Your login session has expired. Please log in again.</div>
+
+                <input name="username" placeholder="Username">
+                <input name="password" placeholder="Password" type="password">
+
+                <div class="error invisible"></div>
+
+                <button class="button">Submit</button>
+            </form>
+        </div>
+        <script>
+            (function ($) {
+                'use strict';
+
+//change Top Form to use php
+                jQuery("#Top_Icon #redirects").attr("action", "Modules.php?modname=misc/Portal.php");
+
+                var Focus = window.Focus = window.Focus || {};
+
+                Focus.username = 'JohnDoe' || null;
+
+                var session = {
+                    "USERNAME": "JohnDoe",
+                    "UserSyear": "2015",
+                    "UserSchool": "2148",
+                    "student_id": "8888888",
+                    "STAFF_ID": null,
+                    "staff_id": null,
+                    "UserCoursePeriod": null,
+                    "UserMP": "101262",
+                    "AJAXRequestHandler": null
+                };
+                Cookies.set('current_session', JSON.stringify(session), {
+                    path: '/'
+                });
+
+                var time_limit = 3600;
+                var server_time = 1451268201;
+                var client_time = Math.floor(new Date() / 1000);
+                var $keepalive = $('#keepalive-alert');
+                var $session = $('#session-alert');
+                var $login = $('#timeout-login');
+
+                var saml = true;
+
+// Adjust the time limit to account for the difference between the server and client time
+                time_limit += client_time - server_time;
+
+// Subtract a minute so the user can refresh the session at the last second and still have time for the request to go through
+                time_limit -= 60;
+
+                Focus.sessionState = {
+                    time_limit: time_limit,
+                    keepalive_active: false,
+                    login_active: false,
+                    session_active: false,
+                };
+                Focus.sessionState.saml = true;
+                if (!saml) {
+                    setInterval(function () {
+                        checkTimeout();
+                        checkSession();
+                    }, 1000);
+                }
+
+                $keepalive.on('click', '.button', keepAlive);
+                $session.on('click', '.button', restoreSession);
+                $login.on('submit', login);
+
+// Session keys that are added to over time and should be kept up to date
+                var additive_keys = {
+                    AJAXRequestHandler: true
+                };
+
+                function checkTimeout() {
+                    var time = Cookies.get('session_timeout');
+                    var left = Focus.sessionState.time_limit - (Math.floor(new Date().getTime() / 1000) - time);
+
+                    if (left < 0) {
+                        if (!Focus.sessionState.login_active) {
+                            Focus.modal($login, true);
+                            $keepalive.trigger('focusModalClose');
+                            $session.trigger('focusModalClose');
+// Max: If SAML redirect to samlLogout.php
+                            if (Focus.sessionState.saml === null || Focus.sessionState.saml === false) {
+                                Focus.sessionState.login_active = true;
+                                Focus.sessionState.keepalive_active = false;
+
+                                $login.find('form').get(0).reset();
+                                $login.find('.error').addClass('invisible');
+                                $login.find(':input:visible').first().focus();
+
+                                logout();
+                            }
+                            else {
+                                window.location = "samlLogout.php";
+                            }
+
+                        }
+                    }
+                    else if (left <= 60) {
+                        if (!Focus.sessionState.keepalive_active) {
+                            Focus.modal($keepalive, true);
+
+                            Focus.sessionState.login_active = false;
+                            Focus.sessionState.keepalive_active = true;
+                        }
+
+                        $keepalive.find('.seconds').html(left);
+                    }
+                    else {
+                        if (Focus.sessionState.login_active) {
+                            $login.trigger('focusModalClose');
+
+                            Focus.sessionState.login_active = false;
+                        }
+
+                        if (Focus.sessionState.keepalive_active) {
+                            $keepalive.trigger('focusModalClose');
+
+                            Focus.sessionState.keepalive_active = false;
+                        }
+                    }
+                }
+
+                function checkSession() {
+                    if (Focus.sessionState.session_active || Focus.sessionState.login_active) {
+                        return;
+                    }
+
+                    var session_cookie = Cookies.get('current_session');
+                    if (session_cookie === 'undefined') {
+                        return;
+                    }
+
+                    var current = JSON.parse(session_cookie);
+
+                    for (var i in current) {
+                        if (additive_keys[i]) {
+                            continue;
+                        }
+
+                        if (String(session[i]) !== String(current[i])) {
+                            Focus.modal($session, true);
+                            Focus.sessionState.session_active = true;
+
+                            return;
+                        }
+                    }
+                }
+
+                function keepAlive() {
+                    $.post('sessionState.php')
+                            .fail(function () {
+                                window.location = 'index.php?logout';
+                            })
+                            .done(function (result) {
+                                if (result !== '1') {
+                                    window.location = 'index.php?logout';
+
+                                }
+                            });
+                }
+
+                function login(e) {
+                    e.preventDefault();
+
+                    updateAdditiveKeys();
+
+                    var data = $login.find('form').serialize();
+                    var session_string = JSON.stringify(session);
+
+                    $.post('sessionState.php', {
+                                login: data, session: session_string
+                            })
+                            .fail(function () {
+                                window.location = 'index.php?logout';
+                            })
+                            .done(function (result) {
+                                if (result === '1') {
+                                    $login.trigger('focusModalClose');
+                                    $keepalive.trigger('focusModalClose');
+                                    $session.trigger('focusModalClose');
+
+                                    Focus.sessionState.login_active = false;
+                                    Focus.sessionState.keepalive_active = false;
+                                    Focus.sessionState.session_active = false;
+                                }
+                                else if (result === '2') {
+                                    window.location = window.location;
+                                }
+                                else {
+                                    $login.find('.error').removeClass('invisible').html(result);
+                                }
+                            });
+                }
+
+                function logout() {
+                    $.post('sessionState.php', {
+                                logout: 1
+                            })
+                            .fail(function () {
+                                window.location = 'index.php?logout';
+                            })
+                            .done(function (result) {
+                                if (result !== '1') {
+                                    window.location = 'index.php?logout';
+
+                                }
+                            });
+                }
+
+                function restoreSession() {
+                    updateAdditiveKeys();
+
+                    var session_string = JSON.stringify(session);
+
+                    $.post('sessionState.php', {session: session_string})
+                            .fail(function () {
+                                window.location = 'index.php?logout';
+                            })
+                            .done(function (result) {
+                                if (result === '1') {
+                                    Cookies.set('current_session', session_string, {
+                                        path: '/'
+                                    });
+
+                                    $login.trigger('focusModalClose');
+                                    $keepalive.trigger('focusModalClose');
+                                    $session.trigger('focusModalClose');
+
+                                    Focus.sessionState.login_active = false;
+                                    Focus.sessionState.keepalive_active = false;
+                                    Focus.sessionState.session_active = false;
+                                }
+                                else if (result === '2') {
+                                    window.location = window.location;
+                                }
+                                else {
+                                    window.location = 'index.php?logout';
+                                }
+                            });
+                }
+
+                function updateAdditiveKeys() {
+                    var current_session = JSON.parse(Cookies.get('current_session'));
+
+                    for (var i in additive_keys) {
+                        session[i] = current_session[i];
+                    }
+                }
+            }(jQuery));
+        </script>
+</body>
+</html>
