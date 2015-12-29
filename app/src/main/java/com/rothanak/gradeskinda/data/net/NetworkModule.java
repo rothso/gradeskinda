@@ -10,9 +10,15 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit.RxJavaCallAdapterFactory;
 
 @Module
 public class NetworkModule {
+
+    @Provides @Singleton RxJavaCallAdapterFactory provideCallAdapter() {
+        // For Retrofit 2.0 to return Observable<Foo> instances
+        return RxJavaCallAdapterFactory.create();
+    }
 
     @Provides @Singleton CookieManager provideCookieManager() {
         CookieManager cookieManager = new CookieManager();

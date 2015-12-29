@@ -12,29 +12,20 @@ import java.io.IOException;
 import java.net.CookieManager;
 
 import retrofit.Response;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
-import retrofit.http.GET;
-import retrofit.http.POST;
-import retrofit.http.Url;
 import rx.Observable;
+
+import static com.rothanak.gradeskinda.data.auth.AuthModule.LoginApi;
 
 class RemoteLoginService implements LoginService {
 
+    private final LoginApi loginApi;
     private final OkHttpClient client;
     private final CookieManager cookieManager;
-    private final LoginApi loginApi;
 
-    public RemoteLoginService(OkHttpClient client, CookieManager cookieManager) {
+    public RemoteLoginService(LoginApi loginApi, OkHttpClient client, CookieManager cookieManager) {
+        this.loginApi = loginApi;
         this.client = client;
         this.cookieManager = cookieManager;
-        this.loginApi = new Retrofit.Builder()
-                .baseUrl("https://duval.focusschoolsoftware.com/")
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client).build()
-                .create(LoginApi.class);
     }
 
     /**
@@ -107,19 +98,4 @@ class RemoteLoginService implements LoginService {
         }
     }
 
-    private interface LoginApi {
-
-        @GET("focus/") Observable<Response<Void>> initialize();
-
-        @FormUrlEncoded @POST Observable<Response<ResponseBody>> login(
-                @Url String loginUrl,
-                @Field("UserName") String username,
-                @Field("Password") String password
-        );
-
-        @FormUrlEncoded
-        @POST("focus/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp")
-        Observable<Response<ResponseBody>> finalize(@Field("SAMLResponse") String responseKey);
-
-    }
 }

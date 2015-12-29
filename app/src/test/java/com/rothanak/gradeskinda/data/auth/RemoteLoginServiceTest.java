@@ -4,9 +4,6 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.rothanak.gradeskinda.domain.model.Credentials;
 import com.rothanak.gradeskinda.domain.model.CredentialsBuilder;
 import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -14,8 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.net.HttpCookie;
 import java.util.List;
 
@@ -37,43 +32,25 @@ public class RemoteLoginServiceTest {
     /*
      * Focus uses the SAML protocol for authentication, requiring a chain of requests to be sent to
      * two servers, the service provider and the identity provider (Duval), both of which will need
-     * to be stubbed to return canned responses.
+     * to be stubbed to return canned responses. One port stubs SvP requests, the other stubs IdP.
      */
-    @Rule public WireMockRule serviceProvider = new WireMockRule(8080);  // duval.focusschoolsoftware.com
-    @Rule public WireMockRule identityProvider = new WireMockRule(8081); // fs.duvalschools.org
+    public static int SVP_PORT = 8080;  // duval.focusschoolsoftware.com
+    public static int IDP_PORT = 8081;  // fs.duvalschools.org
+    @Rule public WireMockRule serviceProvider = new WireMockRule(SVP_PORT);
+    @Rule public WireMockRule identityProvider = new WireMockRule(IDP_PORT);
+
+    private HttpUrl testServiceEndpoint = HttpUrl.parse("http://localhost:" + SVP_PORT);
+    private HttpUrl testIdentityEndpoint = HttpUrl.parse("http://localhost:" + IDP_PORT);
 
     private RemoteLoginService loginService;
-    private OkHttpClient client;
 
     @Before public void setUp() {
-        // TODO replace this mess with a Dagger module setup
-        CookieManager cookieManager = new CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
-                .setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        client = new OkHttpClient().setCookieHandler(cookieManager);
-
-        // Rewrite requests to use the stubbing proxies
-        client.interceptors().add(chain -> {
-            Request request = chain.request();
-
-            HttpUrl url = request.httpUrl();
-            String host = url.host();
-            if (host.equals("duval.focusschoolsoftware.com")) {
-                url = url.newBuilder().scheme("http").host("localhost").port(8080).build();
-            } else if (host.equals("fs.duvalschools.org")) {
-                url = url.newBuilder().scheme("http").host("localhost").port(8081).build();
-            }
-            request = request.newBuilder().url(url).build();
-
-            return chain.proceed(request);
-        });
-
-        client.interceptors().add(logging);
-        loginService = new RemoteLoginService(client, cookieManager);
+        loginService = (RemoteLoginService) DaggerAuthComponent.builder()
+                .authModule(new AuthModule().setEndpoint(testServiceEndpoint))
+                .build().loginService();
     }
 
+    /* TODO replace hard-coded magic numbers -> test builder constants */
     public class Login {
 
         public class WhenCredentialsSucceed {
@@ -85,6 +62,7 @@ public class RemoteLoginServiceTest {
                                 .withStatus(302)
                                 .withHeader("Set-Cookie", "PHPSESSID=583i92voktl9c8lii88fp67l26; path=/focus")
                                 .withHeader("Set-Cookie", "SimpleSAMLSessionID=376c770c7803113b6066fc95b78e9b17; path=/; httponly")
+                                // TODO use endpoint variable instead of hard-coding
                                 .withHeader("Location", "http://localhost:8081/adfs/ls/?SAMLRequest=rVLLbtswEPwVgXeJkhzFAmEbcGIENZC")
                                 .withBodyFile("login.init.index.html")));
 
@@ -128,7 +106,7 @@ public class RemoteLoginServiceTest {
         public class WhenCredentialsFail {
 
             @Before public void setUp() {
-                // TODO clean up
+                // TODO above
                 serviceProvider.givenThat(get(urlEqualTo("/focus/"))
                         .willReturn(aResponse()
                                 .withStatus(302)

@@ -1,6 +1,7 @@
 package com.rothanak.gradeskinda;
 
 import com.rothanak.gradeskinda.data.auth.AuthModule;
+import com.rothanak.gradeskinda.data.net.NetworkModule;
 import com.rothanak.gradeskinda.domain.interactor.InteractorModule;
 import com.rothanak.gradeskinda.domain.interactor.LoginInteractor;
 
@@ -12,6 +13,7 @@ import dagger.Component;
 @Component(
         modules = {
                 InteractorModule.class,
+                NetworkModule.class,
                 AuthModule.class
         }
 )
