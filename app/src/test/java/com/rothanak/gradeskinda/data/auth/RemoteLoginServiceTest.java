@@ -43,6 +43,7 @@ public class RemoteLoginServiceTest {
     @Rule public WireMockRule identityProvider = new WireMockRule(8081); // fs.duvalschools.org
 
     private RemoteLoginService loginService;
+    private OkHttpClient client;
 
     @Before public void setUp() {
         // TODO replace this mess with a Dagger module setup
@@ -51,8 +52,7 @@ public class RemoteLoginServiceTest {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        OkHttpClient client = new OkHttpClient()
-                .setCookieHandler(cookieManager);
+        client = new OkHttpClient().setCookieHandler(cookieManager);
 
         // Rewrite requests to use the stubbing proxies
         client.interceptors().add(chain -> {
@@ -70,7 +70,7 @@ public class RemoteLoginServiceTest {
             return chain.proceed(request);
         });
 
-        client.networkInterceptors().add(logging);
+        client.interceptors().add(logging);
         loginService = new RemoteLoginService(client, cookieManager);
     }
 
@@ -79,13 +79,14 @@ public class RemoteLoginServiceTest {
         public class WhenCredentialsSucceed {
 
             @Before public void setUp() {
+                // TODO clean up
                 serviceProvider.givenThat(get(urlEqualTo("/focus/"))
                         .willReturn(aResponse()
                                 .withStatus(302)
                                 .withHeader("Set-Cookie", "PHPSESSID=583i92voktl9c8lii88fp67l26; path=/focus")
                                 .withHeader("Set-Cookie", "SimpleSAMLSessionID=376c770c7803113b6066fc95b78e9b17; path=/; httponly")
                                 .withHeader("Location", "http://localhost:8081/adfs/ls/?SAMLRequest=rVLLbtswEPwVgXeJkhzFAmEbcGIENZC")
-                                .withBodyFile("login.success.index.html")));
+                                .withBodyFile("login.init.index.html")));
 
                 identityProvider.givenThat(post(urlPathEqualTo("/adfs/ls/"))
                         .withQueryParam("SAMLRequest", equalTo("rVLLbtswEPwVgXeJkhzFAmEbcGIENZC"))
@@ -108,7 +109,7 @@ public class RemoteLoginServiceTest {
                                 .withBodyFile("login.success.done.html")));
             }
 
-            @Test public void ShouldReturnSession() {
+            @Test public void shouldReturnSession() {
                 Credentials credentials = CredentialsBuilder.defaultCredentials()
                         .withUsername("JohnDoe")
                         .withPassword("correct horse battery staple")
@@ -117,6 +118,7 @@ public class RemoteLoginServiceTest {
                 Session session = loginService.login(credentials).toBlocking().first();
                 List<HttpCookie> cookies = session.getCookies();
 
+                // TODO domain language assertions
                 assertThat(cookies.get(0).getValue()).isEqualTo("583i92voktl9c8lii88fp67l26");
                 assertThat(cookies.get(1).getValue()).isEqualTo("1451268200");
             }
@@ -125,8 +127,40 @@ public class RemoteLoginServiceTest {
 
         public class WhenCredentialsFail {
 
+            @Before public void setUp() {
+                // TODO clean up
+                serviceProvider.givenThat(get(urlEqualTo("/focus/"))
+                        .willReturn(aResponse()
+                                .withStatus(302)
+                                .withHeader("Set-Cookie", "PHPSESSID=583i92voktl9c8lii88fp67l26; path=/focus")
+                                .withHeader("Set-Cookie", "SimpleSAMLSessionID=376c770c7803113b6066fc95b78e9b17; path=/; httponly")
+                                .withHeader("Location", "http://localhost:8081/adfs/ls/?SAMLRequest=rVLLbtswEPwVgXeJkhzFAmEbcGIENZC")
+                                .withBodyFile("login.init.index.html")));
+
+                identityProvider.givenThat(post(urlPathEqualTo("/adfs/ls/"))
+                        .withQueryParam("SAMLRequest", equalTo("rVLLbtswEPwVgXeJkhzFAmEbcGIENZC"))
+                        .withRequestBody(equalTo("UserName=DCPS%5CJohnDoe&Password=wrong%20horse%20battery%20staple"))
+                        .willReturn(aResponse()
+                                .withBodyFile("login.failed.response.html")));
+            }
+
+            @Test public void shouldReturnNull() {
+                Credentials credentials = CredentialsBuilder.defaultCredentials()
+                        .withUsername("JohnDoe")
+                        .withPassword("wrong horse battery staple")
+                        .build();
+
+                Session session = loginService.login(credentials).toBlocking().first();
+
+                assertThat(session).isNull();
+            }
+
+        }
+
+        public class WhenSocketTimeout {
+
             @Test @Ignore
-            public void ShouldReturnNull() {
+            public void shouldRetryThreeTimes() {
             }
 
         }
@@ -134,7 +168,7 @@ public class RemoteLoginServiceTest {
         public class WhenRemoteNetworkDown {
 
             @Test @Ignore
-            public void ShouldThrowRemoteNetworkDownException() {
+            public void shouldThrowRemoteNetworkDownException() {
             }
 
         }

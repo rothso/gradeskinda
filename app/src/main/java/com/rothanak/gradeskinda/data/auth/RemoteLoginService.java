@@ -37,6 +37,12 @@ class RemoteLoginService implements LoginService {
                 .create(LoginApi.class);
     }
 
+    /**
+     * Attempt to authenticate the user on the server. TODO docs
+     *
+     * @return A Session object containing the PHPSESSID and session timeout http cookies,
+     * respectively, or a null object if the login failed. TODO: simplify Session
+     */
     @Override
     public Observable<Session> login(Credentials credentials) {
         String user = credentials.getUsername();
@@ -49,8 +55,8 @@ class RemoteLoginService implements LoginService {
                 .doOnNext(voidResponse -> client.setFollowRedirects(true))
                 .map(this::constructLoginUrl)
                 .flatMap(loginUrl -> loginApi.login(loginUrl, "DCPS\\" + user, pass))
+                .filter(this::isLoginSuccessful)
                 .map(this::parseForResponseKey)
-                .filter(key -> key != null && !key.isEmpty())
                 .flatMap(loginApi::finalize)
                 .flatMap(response ->
                         // Filter the cookies and store them in a Session
@@ -58,15 +64,37 @@ class RemoteLoginService implements LoginService {
                                 .filter(cookie -> cookie.getName().matches("PHPSESSID|session_timeout"))
                                 .toList()
                                 .map(Session::new)
-                );
+                )
+                .defaultIfEmpty(null);
     }
 
+    /*
+     * Get the URL to which the login credentials should be posted.
+     *
+     * Following redirects and parsing HTML forms is slow. Instead, we can just deduce the POST
+     * target url from the redirect header and then append our federation as a query parameter.
+     */
     private String constructLoginUrl(Response<Void> response) {
         String base = response.headers().get("Location");
         String arg = "&RedirectToIdentityProvider=urn%3Afederation%3ADCPS";
         return base + arg;
     }
 
+    /*
+     * Determine the success of the login on the server. A non-successful login will redirect the
+     * http client back to the login form without setting a session cookie.
+     */
+    private boolean isLoginSuccessful(Response<ResponseBody> response) {
+        String cookie = response.headers().get("Set-Cookie");
+        return cookie != null && cookie.startsWith("SAMLSession=");
+    }
+
+    /*
+     * Get the response key to be forwarded to the service provider.
+     *
+     * The identity provider responds with a javascript form redirect instead of a 302 code upon
+     * successful logins, so we end up extracting the key to forward the request ourselves.
+     */
     private String parseForResponseKey(Response<ResponseBody> response) {
         try {
             String body = response.body().string();
