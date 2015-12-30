@@ -13,6 +13,7 @@ import java.net.CookieManager;
 
 import retrofit.Response;
 import rx.Observable;
+import timber.log.Timber;
 
 import static com.rothanak.gradeskinda.data.auth.AuthModule.LoginApi;
 
@@ -77,7 +78,9 @@ class RemoteLoginService implements LoginService {
      */
     private boolean isLoginSuccessful(Response<ResponseBody> response) {
         String cookie = response.headers().get("Set-Cookie");
-        return cookie != null && cookie.startsWith("SAMLSession=");
+        boolean success = cookie != null && cookie.startsWith("SAMLSession=");
+        Timber.d(success ? "Login successful" : "Login failed");
+        return success;
     }
 
     /*
