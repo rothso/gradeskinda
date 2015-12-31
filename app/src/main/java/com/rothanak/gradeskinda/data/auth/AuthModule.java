@@ -34,7 +34,7 @@ public class AuthModule {
 
     @Provides @Singleton
     LoginService loginService(LoginApi loginApi, OkHttpClient client, CookieManager cookieManager) {
-        return new RemoteLoginService(loginApi, client, cookieManager);
+        return new LoginService(loginApi, client, cookieManager);
     }
 
     @Provides @Singleton SessionRepository sessionRepository() {
@@ -45,7 +45,7 @@ public class AuthModule {
 
     @Provides @Singleton
     Authenticator authenticator(LoginService loginService, SessionRepository sessionRepository) {
-        return new DefaultAuthenticator(loginService, sessionRepository);
+        return new AuthenticatorImpl(loginService, sessionRepository);
     }
 
     @Provides @Singleton

@@ -22,7 +22,7 @@ import static com.rothanak.gradeskinda.mockserver.MockLoginServer.with;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(HierarchicalContextRunner.class)
-public class RemoteLoginServiceTest {
+public class LoginServiceTest {
 
     /*
      * Focus uses the SAML protocol for authentication, requiring a chain of requests to be sent to
@@ -34,11 +34,11 @@ public class RemoteLoginServiceTest {
     @Rule public WireMockRule serviceProvider = new WireMockRule(SVP_PORT);
     @Rule public WireMockRule identityProvider = new WireMockRule(IDP_PORT);
 
-    private RemoteLoginService loginService;
+    private LoginService loginService;
 
     @Before public void setUp() {
         HttpUrl testServiceEndpoint = HttpUrl.parse("http://localhost:" + SVP_PORT);
-        loginService = (RemoteLoginService) DaggerAuthComponent.builder()
+        loginService = DaggerAuthComponent.builder()
                 .authModule(new AuthModule().setEndpoint(testServiceEndpoint))
                 .build().loginService();
     }
@@ -103,24 +103,21 @@ public class RemoteLoginServiceTest {
         public class WhenSocketTimeout {
 
             @Test @Ignore
-            public void shouldRetryThreeTimes() {
-            }
+            public void shouldRetryThreeTimes() {}
 
         }
 
         public class WhenRemoteNetworkDown {
 
             @Test @Ignore
-            public void shouldThrowRemoteNetworkDownException() {
-            }
+            public void shouldThrowRemoteNetworkDownException() {}
 
         }
 
         public class WhenLocalNetworkDown {
 
             @Test @Ignore
-            public void ShouldThrowLocalNetworkDownException() {
-            }
+            public void ShouldThrowLocalNetworkDownException() {}
 
         }
 

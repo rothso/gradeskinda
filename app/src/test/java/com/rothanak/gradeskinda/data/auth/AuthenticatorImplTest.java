@@ -19,15 +19,15 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @RunWith(HierarchicalContextRunner.class)
-public class DefaultAuthenticatorTest {
+public class AuthenticatorImplTest {
 
     @Mock private LoginService loginService;
     @Mock private SessionRepository repository;
-    private DefaultAuthenticator authenticator;
+    private AuthenticatorImpl authenticator;
 
     @Before public void setUp() {
         MockitoAnnotations.initMocks(this);
-        authenticator = new DefaultAuthenticator(loginService, repository);
+        authenticator = new AuthenticatorImpl(loginService, repository);
     }
 
     public class Login {

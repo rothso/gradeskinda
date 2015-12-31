@@ -5,12 +5,12 @@ import com.rothanak.gradeskinda.domain.service.Authenticator;
 
 import rx.Observable;
 
-class DefaultAuthenticator implements Authenticator {
+class AuthenticatorImpl implements Authenticator {
 
     private final LoginService loginService;
     private final SessionRepository repository;
 
-    public DefaultAuthenticator(LoginService loginService, SessionRepository repository) {
+    public AuthenticatorImpl(LoginService loginService, SessionRepository repository) {
         this.loginService = loginService;
         this.repository = repository;
     }
