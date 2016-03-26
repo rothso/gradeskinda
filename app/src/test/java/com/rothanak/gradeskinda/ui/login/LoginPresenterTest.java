@@ -2,7 +2,7 @@ package com.rothanak.gradeskinda.ui.login;
 
 import com.rothanak.gradeskinda.domain.interactor.LoginInteractor;
 import com.rothanak.gradeskinda.domain.model.Credentials;
-import com.rothanak.gradeskinda.domain.model.CredentialsBuilder;
+import com.rothanak.gradeskinda.testbuilder.CredentialsBuilder;
 import com.rothanak.gradeskinda.ui.login.LoginPresenter.View;
 
 import org.junit.Before;

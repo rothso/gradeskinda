@@ -5,6 +5,8 @@ import com.rothanak.gradeskinda.domain.model.Credentials;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class LoginPresenter {
 
     private final LoginInteractor interactor;
@@ -20,11 +22,14 @@ public class LoginPresenter {
         interactor.login(credentials).subscribe(
                 isSuccess -> {
                     if (isSuccess) {
+                        Timber.d("Launching dashboard");
                         view.gotoDashboard();
                     } else {
+                        Timber.d("Showing bad credentials error");
                         view.showBadCredentialsError();
                     }
-                }
+                },
+                throwable -> Timber.e(throwable, "Error logging in")
         );
     }
 

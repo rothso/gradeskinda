@@ -1,11 +1,11 @@
 package com.rothanak.gradeskinda.data.auth;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.rothanak.gradeskinda.domain.model.Credentials;
-import com.rothanak.gradeskinda.domain.model.CredentialsBuilder;
-import com.rothanak.gradeskinda.mockserver.scenario.login.LoginResponse;
-import com.rothanak.gradeskinda.mockserver.scenario.login.LoginScenario;
+import com.rothanak.gradeskinda.mockserver.MockServerRule;
+import com.rothanak.gradeskinda.testbuilder.CredentialsBuilder;
 import com.squareup.okhttp.HttpUrl;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -13,12 +13,25 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.HttpCookie;
+import java.net.SocketTimeoutException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
+import retrofit.RxJavaCallAdapterFactory;
+import rx.Observable;
+import rx.observers.TestSubscriber;
 
-import static com.rothanak.gradeskinda.mockserver.MockLoginServer.with;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.rothanak.gradeskinda.mockserver.scenario.login.LoginResponse.failureResponse;
+import static com.rothanak.gradeskinda.mockserver.scenario.login.LoginResponse.successfulResponse;
+import static com.rothanak.gradeskinda.mockserver.scenario.login.LoginScenario.anyLogin;
+import static com.rothanak.gradeskinda.mockserver.scenario.login.LoginScenario.loginWith;
+import static com.squareup.okhttp.logging.HttpLoggingInterceptor.Level;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(HierarchicalContextRunner.class)
@@ -26,21 +39,28 @@ public class LoginServiceTest {
 
     /*
      * Focus uses the SAML protocol for authentication, requiring a chain of requests to be sent to
-     * two servers, the service provider and the identity provider (Duval), both of which will need
-     * to be stubbed to return canned responses. One port stubs SvP requests, the other stubs IdP.
+     * two servers: the service provider and the identity provider (Duval), both of which we are
+     * stubbing to return canned responses.
      */
-    public static final int SVP_PORT = 8080;  // duval.focusschoolsoftware.com
-    public static final int IDP_PORT = 8081;  // fs.duvalschools.org
-    @Rule public WireMockRule serviceProvider = new WireMockRule(SVP_PORT);
-    @Rule public WireMockRule identityProvider = new WireMockRule(IDP_PORT);
+    @Rule public MockServerRule mockServer = new MockServerRule();
 
     private LoginService loginService;
+    private OkHttpClient okHttpClient;
 
     @Before public void setUp() {
-        HttpUrl testServiceEndpoint = HttpUrl.parse("http://localhost:" + SVP_PORT);
-        loginService = DaggerAuthComponent.builder()
-                .authModule(new AuthModule().setEndpoint(testServiceEndpoint))
-                .build().loginService();
+        // Create an stock OkHttpClient
+        RxJavaCallAdapterFactory rxCallAdapter = RxJavaCallAdapterFactory.create();
+        CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
+        OkHttpClient client = new OkHttpClient();
+        client.setCookieHandler(cookieManager);
+        client.interceptors().add(new HttpLoggingInterceptor().setLevel(Level.BODY));
+        okHttpClient = client;
+
+        // Create a LoginService from the DI module
+        HttpUrl localEndPoint = HttpUrl.parse("http://localhost:" + MockServerRule.DEFAULT_PORT);
+        AuthModule authModule = new LocalAuthModule(() -> localEndPoint);
+        AuthModule.LoginApi loginApi = authModule.loginApi(client, rxCallAdapter);
+        loginService = authModule.loginService(loginApi, client, cookieManager);
     }
 
     public class Login {
@@ -53,9 +73,9 @@ public class LoginServiceTest {
             public static final String SESSION_TIMEOUT = "1451268200";
 
             @Before public void setUp() {
-                with(serviceProvider, identityProvider)
-                        .given(LoginScenario.loginWith(SUCCESSFUL_USERNAME, SUCCESSFUL_PASSWORD))
-                        .willServe(LoginResponse.successful()
+                mockServer
+                        .given(loginWith(SUCCESSFUL_USERNAME, SUCCESSFUL_PASSWORD))
+                        .willServe(successfulResponse()
                                 .withPhpSessionId(PHPSESSID)
                                 .withSessionTimeout(SESSION_TIMEOUT));
             }
@@ -82,28 +102,49 @@ public class LoginServiceTest {
             public static final String BAD_PASSWORD = "wrong";
 
             @Before public void setUp() {
-                with(serviceProvider, identityProvider)
-                        .given(LoginScenario.loginWith(BAD_USERNAME, BAD_PASSWORD))
-                        .willServe(LoginResponse.failure());
+                mockServer
+                        .given(loginWith(BAD_USERNAME, BAD_PASSWORD))
+                        .willServe(failureResponse());
             }
 
-            @Test public void shouldReturnNull() {
+            @Test
+            public void shouldReturnEmpty() {
                 Credentials credentials = CredentialsBuilder.defaultCredentials()
                         .withUsername(BAD_USERNAME)
                         .withPassword(BAD_PASSWORD)
                         .build();
 
-                Session session = loginService.login(credentials).toBlocking().first();
+                Observable<Session> sessionObservable = loginService.login(credentials);
 
-                assertThat(session).isNull();
+                // TODO replace with assertj-rx?
+                assertThat(sessionObservable.toList().toBlocking().first()).isEmpty();
             }
 
         }
 
         public class WhenSocketTimeout {
 
-            @Test @Ignore
-            public void shouldRetryThreeTimes() {}
+            public static final int READ_TIMEOUT = 1000; // milliseconds
+
+            @Before
+            public void setUp() {
+                okHttpClient.setReadTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS);
+                mockServer
+                        .given(anyLogin())
+                        .willServe(successfulResponse()
+                                .withDelay(READ_TIMEOUT + 1));
+            }
+
+            @Test
+            public void shouldRetryUpToThreeTimes() {
+                Credentials credentials = CredentialsBuilder.defaultCredentials().build();
+                TestSubscriber<Session> subscriber = TestSubscriber.create();
+
+                loginService.login(credentials).subscribe(subscriber);
+
+                mockServer.getServiceServer().verify(3, getRequestedFor(urlEqualTo("/focus/")));
+                subscriber.assertError(SocketTimeoutException.class);
+            }
 
         }
 

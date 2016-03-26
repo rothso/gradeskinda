@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.CookieManager;
+import java.net.SocketTimeoutException;
 
 import retrofit.Response;
 import rx.Observable;
@@ -17,7 +18,7 @@ import timber.log.Timber;
 
 import static com.rothanak.gradeskinda.data.auth.AuthModule.LoginApi;
 
-class LoginService {
+public class LoginService {
 
     private final LoginApi loginApi;
     private final OkHttpClient client;
@@ -49,14 +50,15 @@ class LoginService {
                 .filter(this::isLoginSuccessful)
                 .map(this::parseForResponseKey)
                 .flatMap(loginApi::finalize)
+                .doOnError(throwable -> Timber.e(throwable, "Remote login error"))
+                .retry((attempt, e) -> e instanceof SocketTimeoutException && attempt < 3)
                 .flatMap(response ->
                         // Filter the cookies and store them in a Session
                         Observable.from(cookieManager.getCookieStore().getCookies())
                                 .filter(cookie -> cookie.getName().matches("PHPSESSID|session_timeout"))
                                 .toList()
                                 .map(Session::new)
-                )
-                .defaultIfEmpty(null);
+                );
     }
 
     /*
@@ -76,10 +78,10 @@ class LoginService {
      * http client back to the login form without setting a session cookie.
      */
     private boolean isLoginSuccessful(Response<ResponseBody> response) {
-        String cookie = response.headers().get("Set-Cookie");
-        boolean success = cookie != null && cookie.startsWith("SAMLSession=");
-        Timber.d(success ? "Login successful" : "Login failed");
-        return success;
+        return Observable.from(response.headers().values("Set-Cookie"))
+                .exists(cookie -> cookie.startsWith("SamlSession="))
+                .doOnNext(success -> Timber.d(success ? "Login successful" : "Login failed"))
+                .toBlocking().single();
     }
 
     /*

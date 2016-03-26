@@ -1,4 +1,6 @@
-package com.rothanak.gradeskinda.domain.model;
+package com.rothanak.gradeskinda.testbuilder;
+
+import com.rothanak.gradeskinda.domain.model.Credentials;
 
 public class CredentialsBuilder {
 

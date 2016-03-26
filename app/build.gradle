@@ -4,7 +4,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.rothanak.gradeskinda"
@@ -13,8 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testApplicationId "com.rothanak.gradeskinda.cucumber"
-        testInstrumentationRunner "com.rothanak.gradeskinda.cucumber.CucumberRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -22,22 +21,58 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        test {
+            java.srcDirs 'src/testLib/java'
+            assets.srcDirs 'src/testLib/assets'
+        }
+        androidTest {
+            java.srcDirs 'src/testLib/java'
+            assets.srcDirs 'src/testLib/assets'
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+
+        // Workaround: https://code.google.com/p/android/issues/detail?id=195331
+        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
+    }
 }
+
+// Workaround to allow Wiremock to access its HTML response stubs in instrumentation tests, since
+// aapt doesn't package asset folders starting with an underscore and the name of Wiremock's stubs
+// directory (__files) can't be changed. A custom AssetSource in androidTest allows Wiremock to read
+// assets from the mockserver directory.
+// See: https://code.google.com/p/android/issues/detail?id=161356 [1]
+//      https://github.com/tomakehurst/wiremock/issues/47 [2]
+task copyServerFiles(type: Copy) {
+    from 'src/testLib/assets/mockserver/__files'
+    into new File(buildDir, 'intermediates/assets/androidTest/debug/mockserver')
+}
+// TODO run on ALL assembleDebug tasks: http://stackoverflow.com/a/18423209/5623874
+assembleDebug.dependsOn copyServerFiles
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.2.1'
 
     // Java 8 lambdas
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.6'
 
+    // MultiDex
+    compile 'com.android.support:multidex:1.0.1'
+
     // Fix version conflicts
-    testCompile 'com.android.support:support-annotations:23.0.1';
-    androidTestCompile 'com.android.support:support-annotations:23.0.1';
+    testCompile 'com.android.support:support-annotations:23.2.1';
+    androidTestCompile 'com.android.support:support-annotations:23.2.1';
 
     // RxJava
     compile 'io.reactivex:rxjava:1.0.14'
@@ -67,11 +102,19 @@ dependencies {
     compile 'org.jsoup:jsoup:1.8.3'
 
     // Instrumentation testing
-    androidTestCompile 'org.mockito:mockito-core:2.0.31-beta'
-    androidTestCompile 'info.cukes:cucumber-android:1.2.2'
-    androidTestCompile 'com.android.support.test:runner:0.3'
-    androidTestCompile 'com.android.support.test:rules:0.3'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'junit', module: 'junit'
+    }
+    androidTestCompile('com.github.tomakehurst:wiremock:2.0.8-beta') {
+        // https://github.com/tomakehurst/wiremock/issues/53#issuecomment-169204337
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'asm', module: 'asm'
+        exclude group: 'org.json', module: 'json'
+    }
+    androidTestCompile 'org.apache.httpcomponents:httpclient-android:4.3.5'
 
     // Unit testing
     testCompile 'junit:junit:4.12'
@@ -85,4 +128,8 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
     testCompile 'com.github.tomakehurst:wiremock:2.0.8-beta'
+}
+
+configurations {
+    all*.exclude group: 'com.android.support', module: 'support-annoations'
 }

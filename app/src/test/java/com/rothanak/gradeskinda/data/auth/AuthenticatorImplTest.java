@@ -1,7 +1,7 @@
 package com.rothanak.gradeskinda.data.auth;
 
 import com.rothanak.gradeskinda.domain.model.Credentials;
-import com.rothanak.gradeskinda.domain.model.CredentialsBuilder;
+import com.rothanak.gradeskinda.testbuilder.CredentialsBuilder;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -17,7 +17,7 @@ class AuthenticatorImpl implements Authenticator {
 
     @Override public Observable<Boolean> login(Credentials credentials) {
         return loginService.login(credentials)
-                .doOnNext(repository::store)
+                //.doOnNext(repository::store)
                 .map(session -> true)
                 .defaultIfEmpty(false);
     }

@@ -13,7 +13,7 @@ import com.rothanak.gradeskinda.TestGradesApplication;
 import com.rothanak.gradeskinda.domain.interactor.LoginInteractor;
 import com.rothanak.gradeskinda.domain.interactor.MockInteractorModule;
 import com.rothanak.gradeskinda.domain.model.Credentials;
-import com.rothanak.gradeskinda.domain.model.CredentialsBuilder;
+import com.rothanak.gradeskinda.testbuilder.CredentialsBuilder;
 import com.rothanak.gradeskinda.ui.dashboard.DashboardActivity;
 
 import org.junit.Before;

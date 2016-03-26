@@ -2,8 +2,8 @@ package com.rothanak.gradeskinda.domain.interactor;
 
 import com.rothanak.gradeskinda.domain.interactor.scheduler.TestAddSchedulesTransformer;
 import com.rothanak.gradeskinda.domain.model.Credentials;
-import com.rothanak.gradeskinda.domain.model.CredentialsBuilder;
 import com.rothanak.gradeskinda.domain.service.Authenticator;
+import com.rothanak.gradeskinda.testbuilder.CredentialsBuilder;
 
 import org.junit.Before;
 import org.junit.Test;

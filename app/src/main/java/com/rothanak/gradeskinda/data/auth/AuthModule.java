@@ -25,12 +25,8 @@ import rx.Observable;
 @Module
 public class AuthModule {
 
-    private BaseUrl remoteEndpoint = () -> HttpUrl.parse("https://duval.focusschoolsoftware.com");
-
-    public AuthModule setEndpoint(HttpUrl remoteEndpoint) {
-        this.remoteEndpoint = () -> remoteEndpoint;
-        return this;
-    }
+    // Allows test-flavor subclasses of AuthModule to specify their own endpoint
+    protected BaseUrl remoteEndpoint = () -> HttpUrl.parse("https://duval.focusschoolsoftware.com");
 
     @Provides @Singleton
     LoginService loginService(LoginApi loginApi, OkHttpClient client, CookieManager cookieManager) {

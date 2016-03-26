@@ -5,6 +5,7 @@ import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -21,14 +22,16 @@ public class NetworkModule {
     }
 
     @Provides @Singleton CookieManager provideCookieManager() {
-        CookieManager cookieManager = new CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        return cookieManager;
+        return new CookieManager(null, CookiePolicy.ACCEPT_ALL);
     }
 
     @Provides @Singleton OkHttpClient provideOkHttpClient(CookieManager cookieManager) {
         OkHttpClient client = new OkHttpClient()
                 .setCookieHandler(cookieManager);
+
+        // todo instead look into retrying with exponential backoff?
+        client.setReadTimeout(30, TimeUnit.SECONDS);
+        client.setConnectTimeout(30, TimeUnit.SECONDS);
 
         // Log request/response headers and bodies to the console
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor()

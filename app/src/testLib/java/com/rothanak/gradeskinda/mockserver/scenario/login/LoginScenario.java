@@ -10,6 +10,10 @@ public class LoginScenario {
         this.password = password;
     }
 
+    public static LoginScenario anyLogin() {
+        return new LoginScenario(null, null);
+    }
+
     public static LoginScenario loginWith(String username, String password) {
         return new LoginScenario(username, password);
     }
