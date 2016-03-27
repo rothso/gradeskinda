@@ -4,5 +4,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_login">Login</string>
+
+    <string name="login.activity.title">Login</string>
+    <string name="login.error.bad_credentials">The username or password is incorrect.</string>
+    <string name="login.error.unexpected">An unexpected error occurred while logging in. Perhaps try again.</string>
 </resources>

@@ -17,6 +17,7 @@ import rx.Observable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 @RunWith(HierarchicalContextRunner.class)
 public class LoginPresenterTest {
@@ -25,7 +26,8 @@ public class LoginPresenterTest {
     @Mock private View view;
     private LoginPresenter presenter;
 
-    @Before public void setUp() {
+    @Before
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         presenter = new LoginPresenter(interactor);
         presenter.attachView(view);
@@ -54,21 +56,48 @@ public class LoginPresenterTest {
 
         public class WhenCredentialsBad {
 
-            @Test public void shouldTriggerError() {
+            private final Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
+            private final String username = badCredentials.getUsername();
+            private final String password = badCredentials.getPassword();
+
+            @Before
+            public void setUp() {
                 // Arrange a doomed login
-                Credentials badCredentials = CredentialsBuilder.defaultCredentials().build();
-                String username = badCredentials.getUsername();
-                String password = badCredentials.getPassword();
                 given(interactor.login(badCredentials)).willReturn(Observable.just(false));
+            }
 
-                // Log in with bad credentials
+            @Test
+            public void shouldNotTriggerShowDashboard() {
                 presenter.verifyCredentials(username, password);
-
-                // Verify the user cannot proceed and sees an error
                 verify(view, never()).gotoDashboard();
+            }
+
+            @Test
+            public void shouldTriggerBadCredentialsError() {
+                presenter.verifyCredentials(username, password);
                 verify(view).showBadCredentialsError();
             }
 
         }
+
+        public class WhenCredentialsNull {
+
+            private final String username = null;
+            private final String password = null;
+
+            @Test
+            public void shouldNotTriggerShowDashboard() {
+                presenter.verifyCredentials(username, password);
+                verify(view, never()).gotoDashboard();
+            }
+
+            @Test
+            public void shouldNotLogIn() {
+                presenter.verifyCredentials(username, password);
+                verifyZeroInteractions(interactor);
+            }
+
+        }
+
     }
 }

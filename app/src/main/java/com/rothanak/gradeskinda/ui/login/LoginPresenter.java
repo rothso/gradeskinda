@@ -18,6 +18,8 @@ public class LoginPresenter {
     }
 
     public void verifyCredentials(String user, String pass) {
+        if (user == null || pass == null) return;
+
         Credentials credentials = new Credentials(user, pass);
         interactor.login(credentials).subscribe(
                 isSuccess -> {
@@ -29,7 +31,10 @@ public class LoginPresenter {
                         view.showBadCredentialsError();
                     }
                 },
-                throwable -> Timber.e(throwable, "Error logging in")
+                throwable -> {
+                    Timber.e(throwable, "Error logging in");
+                    view.showUnexpectedError();
+                }
         );
     }
 
@@ -42,6 +47,8 @@ public class LoginPresenter {
         void gotoDashboard();
 
         void showBadCredentialsError();
+
+        void showUnexpectedError();
 
     }
 
